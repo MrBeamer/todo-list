@@ -6,7 +6,7 @@ export default {
   entry: "./src/index.js",
   output: {
     filename: "main.js",
-    path: path: path.resolve(process.cwd(), "dist"),
+    path: path.resolve(import.meta.dirname, "dist"),
     clean: true,
   },
   devtool: "eval-source-map",
