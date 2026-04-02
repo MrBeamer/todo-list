@@ -1,8 +1,11 @@
+// A list should hold color code and the title
+
 class TodoList {
   _list = [];
-
-  constructor(title) {
-    this._title = title;
+  _id = crypto.randomUUID();
+  constructor(title, iconColor = "red") {
+    this._title = title.toLowerCase();
+    this._iconColor = iconColor;
   }
 
   addItem(item) {
@@ -10,6 +13,7 @@ class TodoList {
   }
 
   deleteItem(item) {
+    // item.id === ui.id;
     //placeholder
   }
 

@@ -9,6 +9,11 @@
       href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <title>Owari</title>
   </head>
   <body>
@@ -28,12 +33,128 @@
           <li class="nav-item">Gym</li>
           <li class="nav-item">Grocery</li>
         </ul>
-        <button class="btn-create-list">
+        <button
+          class="btn-create-list"
+          command="show-modal"
+          commandfor="dialog-create-list"
+        >
           <span>+</span>
           Create new list
         </button>
       </nav>
     </header>
-    <main id="main-content"></main>
+    <main id="main-content">
+      <div class="intro-container">
+        <div class="intro-content">
+          <h2 class="intro-welcome">Good Morning, Michael.</h2>
+          <h3 class="intro-date">Saturday, 28 March 2026</h3>
+        </div>
+        <button class="btn-select-date">Today</button>
+      </div>
+
+      <ul class="task-list" id="main-task-list">
+        <li class="task-item">
+          <div class="task-item-left">
+            <input type="checkbox" id="generated1" name="generated1" checked />
+            <label for="generated1">Watch Netflix - Vinland Saga</label>
+            <div class="list-icon"></div>
+          </div>
+          <div class="task-item-right">
+            <div class="task-item-date">02.04.2026</div>
+            <button class="material-icons task-item-menu">more_vert</button>
+          </div>
+        </li>
+        <li class="task-item">
+          <div class="task-item-left">
+            <input type="checkbox" id="generated2" name="generated2" />
+            <label for="generated2">Do Laundry</label>
+          </div>
+          <div class="task-item-right">
+            <div class="task-item-date">03.04.2026</div>
+            <button class="material-icons task-item-menu">more_vert</button>
+          </div>
+        </li>
+        <li class="task-item">
+          <div class="task-item-left">
+            <input type="checkbox" id="generated3" name="generated3" />
+            <label for="generated3">Learn Coding</label>
+          </div>
+          <div class="task-item-right">
+            <div class="task-item-date">04.04.2026</div>
+            <button class="material-icons task-item-menu">more_vert</button>
+          </div>
+        </li>
+      </ul>
+      <button
+        class="btn-create-task"
+        command="show-modal"
+        commandfor="dialog-create-task"
+      >
+        <span>+</span>
+        Create a new task
+      </button>
+      <dialog id="dialog-create-task">
+        <form class="form-task" method="dialog">
+          <h2>New Task</h2>
+          <div class="field" id="field-task">
+            <label for="task">Task</label>
+            <input type="text" name="taskDescription" id="task" />
+          </div>
+          <div class="field" id="field-date">
+            <label for="task">Date</label>
+            <input type="date" name="date" id="date" />
+          </div>
+          <div class="field" id="field-list">
+            <label for="list">List</label>
+            <select name="taskList" id="list">
+              <option value="">Please choose a list</option>
+              <option value="home">Home</option>
+              <option value="gym">Gym</option>
+            </select>
+          </div>
+          <div class="form-task-controls">
+            <button
+              class="form-task-close"
+              type="button"
+              commandfor="dialog-create-task"
+              command="close"
+            >
+              Close
+            </button>
+            <button class="form-task-save" type="submit">Save</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="dialog-create-list">
+        <form class="form-list" method="dialog">
+          <h2>New List</h2>
+          <div class="field" id="field-listTitle">
+            <label for="listTitle">List Name</label>
+            <input type="text" name="listTitle" id="listTitle" />
+          </div>
+          <div class="field" id="field-iconColor">
+            <label for="iconColor">Icon Color</label>
+            <input
+              type="color"
+              id="iconColor"
+              name="iconColor"
+              value="#e66465"
+            />
+          </div>
+          <div class="form-list-controls">
+            <button
+              class="form-list-close"
+              type="button"
+              commandfor="dialog-create-list"
+              command="close"
+            >
+              Close
+            </button>
+            <button class="form-list-save" type="submit">Save</button>
+          </div>
+        </form>
+      </dialog>
+    </main>
   </body>
 </html>

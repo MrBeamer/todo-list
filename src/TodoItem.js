@@ -1,10 +1,12 @@
 class TodoItem {
   _isChecked = false;
-  constructor(title, description, dueDate = "none", priority = "none") {
-    this._title = title;
+  _id = crypto.randomUUID();
+  constructor(description, dueDate = "none", assignedListTitle = "home") {
+    // this._title = title;  // not used right now
     this._description = description;
     this._dueDate = dueDate;
-    this._priority = priority;
+    this._assignedListTitle = assignedListTitle;
+    // this._priority = priority; // not used right now
   }
 
   toggleIsChecked() {
@@ -18,6 +20,15 @@ class TodoItem {
   get title() {
     return this._title;
   }
+
+  get assignedListTitle() {
+    return this._assignedListTitle;
+  }
+
+  set assignedListTitle(listTitle) {
+    this._assignedListTitle = listTitle;
+  }
+
   get description() {
     return this._description;
   }
@@ -28,6 +39,10 @@ class TodoItem {
 
   get priority() {
     return this._priority;
+  }
+
+  get id() {
+    return this._id;
   }
 
   set title(title) {
@@ -52,11 +67,5 @@ class TodoItem {
     this._priority = lookUp[input];
   }
 }
-
-const test = new TodoItem("Title me", "Description you", "12.03.2026", "high");
-console.log(test);
-console.log(test._title);
-
-//console.log(lookUp[2]);
 
 export { TodoItem };

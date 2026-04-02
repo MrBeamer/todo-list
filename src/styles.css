@@ -4,6 +4,7 @@
   --tertiary-color: #036afb;
   --quaternary-color: #000000;
   --text-secondary-color: #737373;
+  --text-date-color: #9d9d9d;
 }
 
 * {
@@ -63,15 +64,16 @@ nav {
 
 .list {
   display: flex;
-  gap: 9px;
+  gap: 6px;
 }
 
 .list-icon {
   border-radius: 100%;
   background-color: #036afb;
-  width: 16px;
-  height: 16px;
-  margin: 1px 0;
+  width: 14px;
+  height: 14px;
+  margin: 2px 0;
+  box-shadow: 0.5px 0.5px 1px black;
 }
 
 .list-count {
@@ -81,6 +83,10 @@ nav {
   background-color: var(--primary-color);
   width: 25px;
   height: auto;
+}
+
+button {
+  cursor: pointer;
 }
 
 .btn-create-list {
@@ -102,8 +108,214 @@ nav {
   }
 }
 
+/* main content - styles */
 #main-content {
   width: 100%;
   max-width: 100%;
   min-height: 100dvh;
+  margin: 50px 80px 20px 80px;
+  position: relative;
+}
+
+/* intro content -styles */
+.intro-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.intro-content {
+}
+
+.intro-welcome {
+}
+
+.intro-date {
+  margin-top: 3px;
+  color: var(--text-date-color);
+  font-weight: 400;
+}
+
+.btn-select-date {
+  border-radius: 15px;
+  border: none;
+  padding: 20px 30px;
+  background-color: var(--primary-color);
+  color: var(--quaternary-color);
+}
+
+/* task list - styles */
+.task-list {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 20px 30px;
+  background-color: var(--primary-color);
+  color: var(--quaternary-color);
+}
+
+.task-item-right {
+  display: flex;
+  gap: 10px;
+}
+.task-item-left {
+  display: flex;
+  align-items: center;
+}
+
+.task-item-date {
+  color: var(--text-date-color);
+  background-color: var(--secondary-color);
+  border-radius: 15px;
+  padding: 12px 10px 12px 18px;
+}
+
+.task-item-menu {
+  font-size: 25px;
+  border: none;
+  color: var(--text-date-color);
+  background-color: var(--secondary-color);
+  border-radius: 15px;
+  padding: 8px 4px 8px 4px;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+}
+
+input {
+  border-radius: 8px;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+input[type="checkbox"]:not(:checked) {
+  border: 1px solid var(--text-date-color);
+}
+
+input[type="checkbox"]:checked::after {
+  inset: 0;
+  color: var(--primary-color);
+  background-color: var(--quaternary-color);
+  content: "✔";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+label {
+  margin-right: 10px;
+}
+
+.task-item-left > .list-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-create-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  background-color: var(--quaternary-color);
+  border-radius: 15px;
+  padding: 12px 10px 12px 18px;
+  width: 100%; /* remove if button should have justify between */
+  border: none;
+  text-align: left;
+  margin-top: 40px;
+  width: 300px;
+
+  span {
+    font-size: 20px;
+    font-weight: 800;
+  }
+}
+
+/* Dialog - Styles */
+#dialog-create-task,
+#dialog-create-list {
+  position: absolute;
+  top: 10%;
+  left: 28%;
+  border-radius: 15px;
+  width: 380px;
+  border: none;
+}
+
+.form-task,
+.form-list {
+  padding: 30px 25px 30px 25px;
+  flex-direction: column;
+  display: flex;
+  gap: 16px;
+
+  label {
+    color: var(--text-date-color);
+    margin-bottom: 6px;
+  }
+
+  input {
+    width: 100%;
+    padding: 18px 10px;
+    border: 1px solid var(--text-date-color);
+  }
+
+  select {
+    padding: 10px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--text-date-color);
+    max-height: 38px;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-task-controls,
+.form-list-controls {
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+  margin-top: 10px;
+}
+.form-task-close,
+.form-list-close {
+  border: none;
+  color: var(--quaternary-color);
+  background-color: transparent;
+  border: 1px solid var(--text-date-color);
+  padding: 8px 24px;
+  border-radius: 15px;
+  height: 34px;
+}
+
+.form-task-save,
+.form-list-save {
+  border: none;
+  color: var(--primary-color);
+  background-color: var(--quaternary-color);
+  padding: 8px 24px;
+  border-radius: 15px;
+  height: 34px;
+}
+
+#iconColor {
+  background-color: transparent;
+  padding: 5px 10px;
+  height: 38px;
+  border-radius: 8px;
 }
