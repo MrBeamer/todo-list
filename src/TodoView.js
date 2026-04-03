@@ -9,16 +9,18 @@ class TodoView {
   _listIcon = document.querySelector(".list-icon");
   _dialogList = document.querySelector("#dialog-create-list");
   _dialogTask = document.querySelector("#dialog-create-task");
+  _listCount = document.querySelector(".list-count");
+  // _listCounters = document.querySelectorAll(".list-count");
 
   constructor() {}
 
-  renderTask(dataObj) {
+  renderTask(dataObj, iconColor) {
     // Render new task
     const todoItemHtmlElement = `<li class="task-item">
           <div class="task-item-left">
             <input type="checkbox" id="generated1" name="generated1" />
             <label for="generated1">${dataObj.taskDescription}</label>
-            <div class="list-icon"></div>
+            <div class="list-icon" style="background-color: ${iconColor}"></div>
           </div>
           <div class="task-item-right">
             <div class="task-item-date">${dataObj.date}</div>
@@ -40,20 +42,61 @@ class TodoView {
 
   renderNavList(dataObj) {
     const title = capitalize(dataObj.listTitle);
-    const navListHtmlElement = `<li class="nav-item">
+    const navListHtmlElement = `<li class="nav-item" data-filter="${title.toLowerCase()}">
             <div class="list">
               <div class="list-icon" style="background-color: ${dataObj.iconColor}"></div>
               <p class="list-title">${title}</p>
             </div>
-            <span class="list-count">0</span>
+            <span class="list-count" data-list="${title.toLowerCase()}">0</span>
           </li>`;
 
     this._navList.insertAdjacentHTML("beforeend", navListHtmlElement);
   }
 
-  // setIconColor(color) {
-  //   this._listIcon.style.setProperty("background-color", color);
-  // }
+  updateListCounter(todItem, todoList) {
+    const listCounters = document.querySelectorAll(".list-count"); // here until I have local memory because it needs to refresh other wise it will only capture the prerender elements, after local memory move it up to the other queries and add the function at the end of the file
+    for (let listCounter of listCounters) {
+      console.log(listCounter.dataset.list);
+      if (listCounter.dataset.list === todItem.assignedListTitle) {
+        listCounter.textContent = todoList.list.length;
+      }
+    }
+  }
+
+  renderFilteredTasks(listHtmlElement) {
+    listHtmlElement._list.forEach((todo) => {
+      const todoItemHtmlElement = `<li class="task-item">
+          <div class="task-item-left">
+            <input type="checkbox" id="generated1" name="generated1" />
+            <label for="generated1">${todo._description}</label>
+            <div class="list-icon" style="background-color: ${todo._iconColor}"></div>
+          </div>
+          <div class="task-item-right">
+            <div class="task-item-date">${todo._dueDate}</div>
+            <button class="material-icons task-item-menu">more_vert</button>
+          </div>
+        </li>`;
+
+      this._tasklist.insertAdjacentHTML("beforeend", todoItemHtmlElement);
+    });
+  }
+
+  updateActiveFilter(todoList) {
+    for (let navItem of this._navList.children) {
+      if (todoList._title === navItem.dataset.filter) {
+        navItem.classList.add("active");
+      } else {
+        navItem.classList.remove("active");
+      }
+    }
+  }
 }
 
 export { TodoView };
+// here when I have local memory
+// for (let listCounter of this._listCounters) {
+//     console.log(listCounter.dataset.list);
+//     if (listCounter.dataset.list === todItem.assignedListTitle) {
+//       listCounter.textContent = todoList.list.length;
+//     }
+//   }

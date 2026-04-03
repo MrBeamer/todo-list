@@ -21,17 +21,20 @@
       <div class="logo">Owari</div>
       <nav>
         <ul class="nav-list">
-          <li class="nav-item active">
+          <li class="nav-item active" data-filter="home">
             <div class="list">
               <div class="list-icon"></div>
               <p class="list-title">Home</p>
             </div>
-            <span class="list-count">0</span>
+            <span class="list-count" data-list="home">0</span>
           </li>
-          <li class="nav-item">Personal</li>
-          <li class="nav-item">Work</li>
-          <li class="nav-item">Gym</li>
-          <li class="nav-item">Grocery</li>
+          <li class="nav-item" data-filter="gym">
+            <div class="list">
+              <div class="list-icon"></div>
+              <p class="list-title">Gym</p>
+            </div>
+            <span class="list-count" data-list="gym">0</span>
+          </li>
         </ul>
         <button
           class="btn-create-list"

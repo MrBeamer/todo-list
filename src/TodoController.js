@@ -2,12 +2,14 @@ import { TodoItem } from "./TodoItem.js";
 import { TodoView } from "./TodoView.js";
 import { TodoModel } from "./TodoModel.js";
 import { TodoList } from "./TodoList.js";
-import { capitalize } from "./helper.js";
 
-// Add when created task that correct icon is applied
 // add edit task, move task, delete task to every todo-item
-// Add filtering based on lists
-// Make the list counter work
+// Labels names etc needs to variables on the render to-do item or checked status can not be changed
+// when in filtered state adding a new task will just display it in filtered view - should be not visible or?
+// Remove Home bubble and call it all which shows ever task in a unfiltered state?
+// Capture unchecked and checked state in the data - from every task - hardcode with all the titles so its renders all off them
+// Format date correctly
+// add auto update current date to headline
 
 class TodoController {
   _view = new TodoView();
@@ -24,6 +26,10 @@ class TodoController {
     this._view._formList.addEventListener("submit", (event) =>
       this.getListFormData(event),
     );
+
+    this._view._navList.addEventListener("click", (event) => {
+      this.handleListFilter(event);
+    });
   }
 
   updateCheckedState(event) {
@@ -41,15 +47,6 @@ class TodoController {
     return new TodoList(dataObj.listTitle, dataObj.iconColor);
   }
 
-  assignItemToList(todoItem) {
-    const todoList = this._model.findTodoList(todoItem._assignedListTitle);
-    console.log(todoList);
-    todoList.addItem(todoItem);
-    console.log(todoItem);
-    console.log(todoList);
-    console.log(this._model.todoLists);
-  }
-
   // Get data from task form
   getTaskFormData(event) {
     event.preventDefault();
@@ -60,13 +57,24 @@ class TodoController {
     //Create new todo in database
     const todoItem = this.createTodoItem(dataObj);
 
-    // Assign new todo to list
-    this.assignItemToList(todoItem);
-    //just to check delete later
+    // Find todo-list
+    const todoList = this._model.findTodoList(todoItem._assignedListTitle);
+
+    // Get icon color from todo-list for the task card
+    const iconColor = todoList._iconColor;
+    // Set iconColor in data of the todo-item
+    todoItem._iconColor = iconColor;
+
+    // Assign new todo to list / Add task to todo-list
+    todoList.addItem(todoItem);
+    console.log(todoItem);
     console.log(this._model.todoLists);
 
     // Add todo to UI
-    this._view.renderTask(dataObj);
+    this._view.renderTask(dataObj, iconColor);
+
+    // Update todo-list counter UI
+    this._view.updateListCounter(todoItem, todoList);
 
     // Close window after submit
     this._view._dialogTask.close();
@@ -94,6 +102,24 @@ class TodoController {
 
     // Close window after submit
     this._view._dialogList.close();
+  }
+
+  handleListFilter(event) {
+    // Get HTML Element with the class nav-item
+    const navItem = event.target.closest(".nav-item");
+    // Get from the HTML Element the filter-name
+    const filter = navItem.dataset.filter;
+    // Find based on the filter-name the corresponding todo-list
+    const todoList = this._model.findTodoList(filter);
+
+    // Update active filter - background-color
+    this._view.updateActiveFilter(todoList);
+
+    // If the todo-list is empty - do nothing
+    if (todoList._list.length === 0) return;
+    // Else clean tasklist and render the filtered todo-list
+    this._view._tasklist.innerHTML = "";
+    this._view.renderFilteredTasks(todoList);
   }
 
   init() {}

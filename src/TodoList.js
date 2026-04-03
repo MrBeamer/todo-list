@@ -3,7 +3,7 @@
 class TodoList {
   _list = [];
   _id = crypto.randomUUID();
-  constructor(title, iconColor = "red") {
+  constructor(title, iconColor) {
     this._title = title.toLowerCase();
     this._iconColor = iconColor;
   }

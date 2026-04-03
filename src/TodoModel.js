@@ -5,7 +5,7 @@ import { TodoList } from "./TodoList.js";
 
 // delete later just for testing list system
 const home = new TodoList("home", "#036afb");
-const gym = new TodoList("gym", "red");
+const gym = new TodoList("gym", "#fb03deff");
 
 class TodoModel {
   _todoLists = [home, gym];

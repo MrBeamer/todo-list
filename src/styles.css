@@ -56,6 +56,7 @@ nav {
   padding: 12px 10px 12px 18px;
   margin: 0 17px;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .nav-item.active {
