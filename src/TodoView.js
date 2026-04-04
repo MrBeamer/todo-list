@@ -14,16 +14,16 @@ class TodoView {
 
   constructor() {}
 
-  renderTask(dataObj, iconColor) {
+  renderTask(todoItem) {
     // Render new task
     const todoItemHtmlElement = `<li class="task-item">
           <div class="task-item-left">
-            <input type="checkbox" id="generated1" name="generated1" />
-            <label for="generated1">${dataObj.taskDescription}</label>
-            <div class="list-icon" style="background-color: ${iconColor}"></div>
+            <input type="checkbox" id="${todoItem.id}" />
+            <label for="${todoItem.id}">${todoItem._description}</label>
+            <div class="list-icon" style="background-color: ${todoItem._iconColor}"></div>
           </div>
           <div class="task-item-right">
-            <div class="task-item-date">${dataObj.date}</div>
+            <div class="task-item-date">${todoItem._dueDate}</div>
             <button class="material-icons task-item-menu">more_vert</button>
           </div>
         </li>`;
@@ -67,8 +67,8 @@ class TodoView {
     listHtmlElement._list.forEach((todo) => {
       const todoItemHtmlElement = `<li class="task-item">
           <div class="task-item-left">
-            <input type="checkbox" id="generated1" name="generated1" />
-            <label for="generated1">${todo._description}</label>
+            <input type="checkbox" id="${todo.id}" />
+            <label for="${todo.id}">${todo._description}</label>
             <div class="list-icon" style="background-color: ${todo._iconColor}"></div>
           </div>
           <div class="task-item-right">

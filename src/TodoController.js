@@ -4,7 +4,6 @@ import { TodoModel } from "./TodoModel.js";
 import { TodoList } from "./TodoList.js";
 
 // add edit task, move task, delete task to every todo-item
-// Labels names etc needs to variables on the render to-do item or checked status can not be changed
 // when in filtered state adding a new task will just display it in filtered view - should be not visible or?
 // Remove Home bubble and call it all which shows ever task in a unfiltered state?
 // Capture unchecked and checked state in the data - from every task - hardcode with all the titles so its renders all off them
@@ -71,7 +70,7 @@ class TodoController {
     console.log(this._model.todoLists);
 
     // Add todo to UI
-    this._view.renderTask(dataObj, iconColor);
+    this._view.renderTask(todoItem);
 
     // Update todo-list counter UI
     this._view.updateListCounter(todoItem, todoList);
