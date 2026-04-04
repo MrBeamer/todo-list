@@ -18,8 +18,8 @@ class TodoView {
     // Render new task
     const todoItemHtmlElement = `<li class="task-item">
           <div class="task-item-left">
-            <input type="checkbox" id="${todoItem.id}" />
-            <label for="${todoItem.id}">${todoItem._description}</label>
+            <input type="checkbox" id="${todoItem._id}" data-assigned-list="${todoItem._assignedListTitle}"/>
+            <label for="${todoItem._id}">${todoItem._description}</label>
             <div class="list-icon" style="background-color: ${todoItem._iconColor}"></div>
           </div>
           <div class="task-item-right">
@@ -56,7 +56,6 @@ class TodoView {
   updateListCounter(todItem, todoList) {
     const listCounters = document.querySelectorAll(".list-count"); // here until I have local memory because it needs to refresh other wise it will only capture the prerender elements, after local memory move it up to the other queries and add the function at the end of the file
     for (let listCounter of listCounters) {
-      console.log(listCounter.dataset.list);
       if (listCounter.dataset.list === todItem.assignedListTitle) {
         listCounter.textContent = todoList.list.length;
       }
@@ -67,8 +66,8 @@ class TodoView {
     listHtmlElement._list.forEach((todo) => {
       const todoItemHtmlElement = `<li class="task-item">
           <div class="task-item-left">
-            <input type="checkbox" id="${todo.id}" />
-            <label for="${todo.id}">${todo._description}</label>
+            <input type="checkbox" id="${todo._id}" data-assigned-list="${todo._assignedListTitle}"/>
+            <label for="${todo._id}">${todo._description}</label>
             <div class="list-icon" style="background-color: ${todo._iconColor}"></div>
           </div>
           <div class="task-item-right">

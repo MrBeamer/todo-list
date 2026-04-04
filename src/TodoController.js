@@ -16,7 +16,7 @@ class TodoController {
 
   constructor() {
     this._view._tasklist.addEventListener("click", (event) =>
-      this.updateCheckedState(event),
+      this.handleCheckedState(event),
     );
     this._view._formTask.addEventListener("submit", (event) =>
       this.getTaskFormData(event),
@@ -31,8 +31,19 @@ class TodoController {
     });
   }
 
-  updateCheckedState(event) {
-    console.log(event.target); //placeholder
+  handleCheckedState(event) {
+    // If click is not not input - return
+    if (!event.target.closest("input")) return;
+    // Restricts click to only register input
+    const checkBox = event.target.closest("input");
+    // Get assigned todo-list title
+    const assignedList = checkBox.dataset.assignedList;
+    // Find todo-list
+    const todoList = this._model.findTodoList(assignedList);
+    // Get the array from the todo-list object and then filter for the correct todo-item (data entry)
+    const todoItem = todoList._list.find((todo) => todo._id === checkBox.id);
+    todoItem.toggleIsChecked();
+    console.log(todoItem);
   }
 
   createTodoItem(dataObj) {
@@ -121,7 +132,32 @@ class TodoController {
     this._view.renderFilteredTasks(todoList);
   }
 
-  init() {}
+  init() {
+    const todoItem1 = new TodoItem(
+      "Watch Netflix - Vinland Saga",
+      "20.05.2026",
+      "home",
+    );
+    const todoItem2 = new TodoItem("  Learn Coding", "20.04.2026", "home");
+
+    const todoList1 = this._model.findTodoList(todoItem1._assignedListTitle);
+    const todoList2 = this._model.findTodoList(todoItem2._assignedListTitle);
+
+    const iconColor1 = todoList1._iconColor;
+    const iconColor2 = todoList2._iconColor;
+    todoItem1._iconColor = iconColor1;
+    todoItem2._iconColor = iconColor2;
+
+    todoList1.addItem(todoItem1);
+    todoList2.addItem(todoItem2);
+
+    this._view.renderTask(todoItem1);
+    this._view.renderTask(todoItem2);
+
+    this._view.updateListCounter(todoItem1, todoList1);
+    this._view.updateListCounter(todoItem2, todoList2);
+    console.log("init");
+  }
 }
 
 export { TodoController };
