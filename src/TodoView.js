@@ -10,6 +10,7 @@ class TodoView {
   _dialogList = document.querySelector("#dialog-create-list");
   _dialogTask = document.querySelector("#dialog-create-task");
   _listCount = document.querySelector(".list-count");
+  _countAllTodos = document.querySelector('[data-list="home"]');
   // _listCounters = document.querySelectorAll(".list-count");
 
   constructor() {}
@@ -62,8 +63,14 @@ class TodoView {
     }
   }
 
+  updateTotalCount(arr) {
+    this._countAllTodos.textContent = arr.length;
+  }
+
   renderFilteredTasks(listHtmlElement) {
-    listHtmlElement._list.forEach((todo) => {
+    // Clears the list container
+    this._tasklist.innerHTML = "";
+    listHtmlElement.forEach((todo) => {
       const todoItemHtmlElement = `<li class="task-item">
           <div class="task-item-left">
             <input type="checkbox" id="${todo._id}" data-assigned-list="${todo._assignedListTitle}"/>
@@ -80,9 +87,18 @@ class TodoView {
     });
   }
 
-  updateActiveFilter(todoList) {
+  updateActiveFilter(element) {
+    // If the passed value is not a todoList
+    if (element.nodeName === "LI") {
+      for (let navItem of this._navList.children) {
+        navItem.classList.remove("active");
+      }
+      element.classList.add("active");
+      return;
+    }
+    //If the passed value is a todo-list
     for (let navItem of this._navList.children) {
-      if (todoList._title === navItem.dataset.filter) {
+      if (element._title === navItem.dataset.filter) {
         navItem.classList.add("active");
       } else {
         navItem.classList.remove("active");

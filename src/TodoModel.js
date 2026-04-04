@@ -4,15 +4,23 @@ import { TodoItem } from "./TodoItem.js";
 import { TodoList } from "./TodoList.js";
 
 // delete later just for testing list system
-const home = new TodoList("home", "#036afb");
-const gym = new TodoList("gym", "#fb03deff");
+const home = new TodoList("home", "#d2fb03ff");
+const fun = new TodoList("fun", "#036afb");
 
 class TodoModel {
-  _todoLists = [home, gym];
-  constructor() {}
+  _todoLists = [home, fun];
+  _allTodos = [];
 
   updateList() {
     //placeholder
+  }
+
+  addToAllTodos(todo) {
+    this._allTodos.push(todo);
+  }
+
+  get allTodos() {
+    return this._allTodos;
   }
 
   addList(list) {

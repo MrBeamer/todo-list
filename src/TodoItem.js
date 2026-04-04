@@ -2,6 +2,7 @@ class TodoItem {
   _isChecked = false;
   _id = crypto.randomUUID();
   _iconColor = "";
+  _assignedListId = "";
   constructor(description, dueDate = "none", assignedListTitle = "home") {
     // this._title = title;  // not used right now
     this._description = description;

@@ -21,19 +21,19 @@
       <div class="logo">Owari</div>
       <nav>
         <ul class="nav-list">
-          <li class="nav-item active" data-filter="home">
+          <li class="nav-item active default" data-filter="home">
             <div class="list">
-              <div class="list-icon"></div>
+              <!-- <div class="list-icon"></div> -->
               <p class="list-title">Home</p>
             </div>
-            <span class="list-count" data-list="home">0</span>
+            <span class="list-count count-all-todos" data-list="home">2</span>
           </li>
-          <li class="nav-item" data-filter="gym">
+          <li class="nav-item" data-filter="fun">
             <div class="list">
               <div class="list-icon"></div>
-              <p class="list-title">Gym</p>
+              <p class="list-title">Fun</p>
             </div>
-            <span class="list-count" data-list="gym">0</span>
+            <span class="list-count" data-list="fun">0</span>
           </li>
         </ul>
         <button
@@ -68,7 +68,7 @@
           <h2>New Task</h2>
           <div class="field" id="field-task">
             <label for="task">Task</label>
-            <input type="text" name="taskDescription" id="task" />
+            <input type="text" name="taskDescription" id="task" required />
           </div>
           <div class="field" id="field-date">
             <label for="task">Date</label>
@@ -76,10 +76,9 @@
           </div>
           <div class="field" id="field-list">
             <label for="list">List</label>
-            <select name="taskList" id="list">
+            <select name="taskList" id="list" required>
               <option value="">Please choose a list</option>
-              <option value="home">Home</option>
-              <option value="gym">Gym</option>
+              <option value="fun">Fun</option>
             </select>
           </div>
           <div class="form-task-controls">

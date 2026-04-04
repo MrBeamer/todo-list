@@ -3,16 +3,14 @@ import { TodoView } from "./TodoView.js";
 import { TodoModel } from "./TodoModel.js";
 import { TodoList } from "./TodoList.js";
 
-// add edit task, move task, delete task to every todo-item
-// when in filtered state adding a new task will just display it in filtered view - should be not visible or?
-// Remove Home bubble and call it all which shows ever task in a unfiltered state?
-// Capture unchecked and checked state in the data - from every task - hardcode with all the titles so its renders all off them
-// Format date correctly
-// add auto update current date to headline
+// add edit task, delete task to every todo-item
+// When adding a task while filtered it needs to reset active view or move to the correct todlist, t global variable like unfiltered and filtered state - while filtered do that while unfiltered to that
+// Format date correctly and add auto update current date to headline
 
 class TodoController {
   _view = new TodoView();
   _model = new TodoModel();
+  _activeFilter = "home"; // home is default list like all
 
   constructor() {
     this._view._tasklist.addEventListener("click", (event) =>
@@ -77,15 +75,20 @@ class TodoController {
 
     // Assign new todo to list / Add task to todo-list
     todoList.addItem(todoItem);
+    // Additionally push it to a list that holds all todos
+    this._model.addToAllTodos(todoItem);
     console.log(todoItem);
     console.log(this._model.todoLists);
 
-    // Add todo to UI
-    this._view.renderTask(todoItem);
+    // Add todo to UI, only if active filter equals newly created assignedListTitle of todo-item
+    // Makes sure that the todoitem renders in the correct list and not in the current displayed list
+    if (this._activeFilter === todoItem._assignedListTitle)
+      this._view.renderTask(todoItem);
 
     // Update todo-list counter UI
     this._view.updateListCounter(todoItem, todoList);
-
+    // Update total count of todos from home - UI
+    this._view.updateTotalCount(this._model.allTodos);
     // Close window after submit
     this._view._dialogTask.close();
   }
@@ -117,28 +120,40 @@ class TodoController {
   handleListFilter(event) {
     // Get HTML Element with the class nav-item
     const navItem = event.target.closest(".nav-item");
+
+    // If navItem is the default one - render all todos from every list and return
+    if (navItem.classList.contains("default")) {
+      // Update active filter - background-color
+      this._view.updateActiveFilter(navItem);
+      // Cleans taskList and renders the todo-list which holds all todos
+      const allTodoList = this._model.allTodos;
+      this._view.renderFilteredTasks(allTodoList);
+      return;
+    }
+
     // Get from the HTML Element the filter-name
     const filter = navItem.dataset.filter;
     // Find based on the filter-name the corresponding todo-list
     const todoList = this._model.findTodoList(filter);
+    // Use dataset to set active filter
+    this._activeFilter = filter;
 
     // Update active filter - background-color
     this._view.updateActiveFilter(todoList);
 
+    // Else clean tasklist and render the filtered todo-list
+    this._view.renderFilteredTasks(todoList._list);
     // If the todo-list is empty - do nothing
     if (todoList._list.length === 0) return;
-    // Else clean tasklist and render the filtered todo-list
-    this._view._tasklist.innerHTML = "";
-    this._view.renderFilteredTasks(todoList);
   }
 
   init() {
     const todoItem1 = new TodoItem(
       "Watch Netflix - Vinland Saga",
       "20.05.2026",
-      "home",
+      "fun",
     );
-    const todoItem2 = new TodoItem("  Learn Coding", "20.04.2026", "home");
+    const todoItem2 = new TodoItem("  Learn Coding", "20.04.2026", "fun");
 
     const todoList1 = this._model.findTodoList(todoItem1._assignedListTitle);
     const todoList2 = this._model.findTodoList(todoItem2._assignedListTitle);
@@ -150,6 +165,8 @@ class TodoController {
 
     todoList1.addItem(todoItem1);
     todoList2.addItem(todoItem2);
+    this._model.addToAllTodos(todoItem1);
+    this._model.addToAllTodos(todoItem2);
 
     this._view.renderTask(todoItem1);
     this._view.renderTask(todoItem2);
@@ -157,6 +174,7 @@ class TodoController {
     this._view.updateListCounter(todoItem1, todoList1);
     this._view.updateListCounter(todoItem2, todoList2);
     console.log("init");
+    console.log(this._model._allTodos);
   }
 }
 
