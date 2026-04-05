@@ -71,9 +71,9 @@ nav {
 .list-icon {
   border-radius: 100%;
   background-color: #036afb;
-  width: 14px;
-  height: 14px;
-  margin: 2px 0;
+  width: 10px;
+  height: 10px;
+  margin: 4px 0;
   box-shadow: 0.5px 0.5px 1px black;
 }
 
@@ -178,11 +178,22 @@ button {
   padding: 12px 10px 12px 18px;
 }
 
+.task-item-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  visibility: hidden;
+}
+
+.task-item:hover .task-item-menu-container {
+  visibility: visible;
+}
+
 .task-item-menu {
-  font-size: 25px;
+  font-size: 18px;
   border: none;
   color: var(--text-date-color);
-  background-color: var(--secondary-color);
+  background-color: transparent;
   border-radius: 15px;
   padding: 8px 4px 8px 4px;
 }
@@ -220,8 +231,8 @@ label {
 }
 
 .task-item-left > .list-icon {
-  width: 16px;
-  height: 16px;
+  width: 10px;
+  height: 10px;
 }
 
 .btn-create-task {

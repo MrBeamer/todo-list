@@ -12,9 +12,12 @@ class TodoList {
     this._list.push(item);
   }
 
-  deleteItem(item) {
-    // item.id === ui.id;
-    //placeholder
+  deleteItem(todoId) {
+    const todoIndex = this._list.findIndex((item) => {
+      return item._id === todoId;
+    });
+    this._list.splice(todoIndex, 1);
+    console.log(this._list);
   }
 
   get list() {

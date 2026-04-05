@@ -6,6 +6,7 @@ import { TodoList } from "./TodoList.js";
 // add edit task, delete task to every todo-item
 // When adding a task while filtered it needs to reset active view or move to the correct todlist, t global variable like unfiltered and filtered state - while filtered do that while unfiltered to that
 // Format date correctly and add auto update current date to headline
+// last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
 
 class TodoController {
   _view = new TodoView();
@@ -27,6 +28,30 @@ class TodoController {
     this._view._navList.addEventListener("click", (event) => {
       this.handleListFilter(event);
     });
+
+    this._view._tasklist.addEventListener("click", (event) =>
+      this.handleUpdateDelete(event),
+    );
+  }
+
+  handleUpdateDelete(event) {
+    const todoMenu = event.target.closest(".task-item-menu");
+    const todoCard = event.target.closest(".task-item");
+    const assignedList = todoCard.dataset.assignedList;
+    const todoId = todoCard.dataset.todoId;
+
+    if (!todoMenu) return;
+    // Find todo-list
+    const todoList = this._model.findTodoList(assignedList);
+    // Based on click pass todo in delete or edit
+    if (todoMenu.classList.contains("btn-task-edit")) {
+      console.log("edit");
+    } else if (todoMenu.classList.contains("btn-task-delete")) {
+      // Find todo in list and delete from Database
+      todoList.deleteItem(todoId);
+      // Find todo html element and delete it from UI
+      this._view.deleteTask(todoId);
+    }
   }
 
   handleCheckedState(event) {

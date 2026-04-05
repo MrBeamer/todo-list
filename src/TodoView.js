@@ -11,21 +11,33 @@ class TodoView {
   _dialogTask = document.querySelector("#dialog-create-task");
   _listCount = document.querySelector(".list-count");
   _countAllTodos = document.querySelector('[data-list="home"]');
+  _taskItems = document.querySelectorAll("task-list > .task-item");
   // _listCounters = document.querySelectorAll(".list-count");
 
   constructor() {}
 
+  deleteTask(todoId) {
+    for (let taskItem of this._tasklist.children) {
+      if (taskItem.dataset.todoId === todoId) {
+        taskItem.remove();
+      }
+    }
+  }
+
   renderTask(todoItem) {
     // Render new task
-    const todoItemHtmlElement = `<li class="task-item">
-          <div class="task-item-left">
+    const todoItemHtmlElement = `<li class="task-item" data-todo-id="${todoItem._id}" data-assigned-list="${todoItem._assignedListTitle}">
+          <div class="task-item-left" >
             <input type="checkbox" id="${todoItem._id}" data-assigned-list="${todoItem._assignedListTitle}"/>
             <label for="${todoItem._id}">${todoItem._description}</label>
             <div class="list-icon" style="background-color: ${todoItem._iconColor}"></div>
           </div>
           <div class="task-item-right">
             <div class="task-item-date">${todoItem._dueDate}</div>
-            <button class="material-icons task-item-menu">more_vert</button>
+            <div class="task-item-menu-container"> 
+            <button class="material-icons task-item-menu btn-task-edit">edit</button>
+            <button class="material-icons task-item-menu btn-task-delete">delete</button>
+            </div>
           </div>
         </li>`;
 
@@ -79,7 +91,10 @@ class TodoView {
           </div>
           <div class="task-item-right">
             <div class="task-item-date">${todo._dueDate}</div>
-            <button class="material-icons task-item-menu">more_vert</button>
+            <div class="task-item-menu-container"> 
+            <button class="material-icons task-item-menu btn-task-edit">edit</button>
+            <button class="material-icons task-item-menu btn-task-delete">delete</button>
+            </div>
           </div>
         </li>`;
 
