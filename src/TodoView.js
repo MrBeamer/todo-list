@@ -4,14 +4,27 @@ class TodoView {
   _tasklist = document.querySelector("#main-task-list");
   _formTask = document.querySelector(".form-task");
   _formList = document.querySelector(".form-list");
+  _formEditTask = document.querySelector(".form-edit-task");
   _selectForm = document.querySelector("#list");
+  _selectEditForm = document.querySelector("#edit-list");
   _navList = document.querySelector(".nav-list");
   _listIcon = document.querySelector(".list-icon");
   _dialogList = document.querySelector("#dialog-create-list");
   _dialogTask = document.querySelector("#dialog-create-task");
+  _dialogEditTask = document.querySelector("#dialog-edit-task");
   _listCount = document.querySelector(".list-count");
-  _countAllTodos = document.querySelector('[data-list="home"]');
+  _countAllTodos = document.querySelector('[data-list="all"]');
   _taskItems = document.querySelectorAll("task-list > .task-item");
+  _taskEditForm = document.querySelector("#edit-task");
+  _dateEditForm = document.querySelector("#edit-date");
+  _listEditForm = document.querySelector("#edit-list");
+  _hiddenFieldEditForm = document.querySelector("#hidden-form-todo-id");
+  _hiddenFieldEditFormAssignedListTitle = document.querySelector(
+    "#hidden-form-todo-assigned-list",
+  );
+  _hiddenFieldEditFormIconColor = document.querySelector(
+    "#hidden-form-todo-icon-color",
+  );
   // _listCounters = document.querySelectorAll(".list-count");
 
   constructor() {}
@@ -20,6 +33,33 @@ class TodoView {
     for (let taskItem of this._tasklist.children) {
       if (taskItem.dataset.todoId === todoId) {
         taskItem.remove();
+      }
+    }
+  }
+
+  prefillEditForm(description, date, assignedListTitle, todoId, iconColor) {
+    this._taskEditForm.value = description;
+    this._dateEditForm.value = date; // needs to have this format to work "2018-07-22"
+    this._listEditForm.value = assignedListTitle;
+    this._hiddenFieldEditFormAssignedListTitle.value = assignedListTitle;
+    this._hiddenFieldEditForm.value = todoId;
+    this._hiddenFieldEditFormIconColor.value = iconColor;
+  }
+
+  updateTaskCard(description, date, assignedListTitle, todoId, iconColor) {
+    for (let taskItem of this._tasklist.children) {
+      if (taskItem.dataset.todoId === todoId) {
+        let todoDescription = taskItem.querySelector("label");
+        let todoDate = taskItem.querySelector(".task-item-date");
+        let todoCheckbox = taskItem.querySelector("input");
+        let todoIconColor = taskItem.querySelector(".list-icon");
+        todoDescription.textContent = description;
+        todoDate.textContent = date;
+        taskItem.dataset.assignedList = assignedListTitle;
+        todoCheckbox.dataset.assignedList = assignedListTitle;
+        todoIconColor.style.backgroundColor = iconColor;
+
+        console.log(assignedListTitle);
       }
     }
   }
@@ -35,7 +75,8 @@ class TodoView {
           <div class="task-item-right">
             <div class="task-item-date">${todoItem._dueDate}</div>
             <div class="task-item-menu-container"> 
-            <button class="material-icons task-item-menu btn-task-edit">edit</button>
+            <button class="material-icons task-item-menu btn-task-edit" command="show-modal"
+          commandfor="dialog-edit-task">edit</button>
             <button class="material-icons task-item-menu btn-task-delete">delete</button>
             </div>
           </div>
@@ -51,6 +92,7 @@ class TodoView {
     const optionHtmlElement = `<option value="${title.toLowerCase()}">${title}</option>`;
 
     this._selectForm.insertAdjacentHTML("beforeend", optionHtmlElement);
+    this._selectEditForm.insertAdjacentHTML("beforeend", optionHtmlElement);
   }
 
   renderNavList(dataObj) {
@@ -66,24 +108,25 @@ class TodoView {
     this._navList.insertAdjacentHTML("beforeend", navListHtmlElement);
   }
 
-  updateListCounter(todItem, todoList) {
+  updateListCounter(listOfTodoLists, allTodosList) {
+    console.log(allTodosList.length);
     const listCounters = document.querySelectorAll(".list-count"); // here until I have local memory because it needs to refresh other wise it will only capture the prerender elements, after local memory move it up to the other queries and add the function at the end of the file
     for (let listCounter of listCounters) {
-      if (listCounter.dataset.list === todItem.assignedListTitle) {
-        listCounter.textContent = todoList.list.length;
+      for (let todoList of listOfTodoLists) {
+        if (listCounter.dataset.list === todoList.title) {
+          listCounter.textContent = todoList.list.length;
+        }
       }
     }
+    console.log(allTodosList.length);
+    this._countAllTodos.textContent = allTodosList.length; // moving it here fixed the initial 0 for all - but I do not why maybe check if any other list ist called home?
   }
 
-  updateTotalCount(arr) {
-    this._countAllTodos.textContent = arr.length;
-  }
-
-  renderFilteredTasks(listHtmlElement) {
+  renderFilteredTasks(list) {
     // Clears the list container
     this._tasklist.innerHTML = "";
-    listHtmlElement.forEach((todo) => {
-      const todoItemHtmlElement = `<li class="task-item">
+    list.forEach((todo) => {
+      const todoItemHtmlElement = `<li class="task-item" class="task-item" data-todo-id="${todo._id}" data-assigned-list="${todo._assignedListTitle}">
           <div class="task-item-left">
             <input type="checkbox" id="${todo._id}" data-assigned-list="${todo._assignedListTitle}"/>
             <label for="${todo._id}">${todo._description}</label>
@@ -92,7 +135,8 @@ class TodoView {
           <div class="task-item-right">
             <div class="task-item-date">${todo._dueDate}</div>
             <div class="task-item-menu-container"> 
-            <button class="material-icons task-item-menu btn-task-edit">edit</button>
+            <button class="material-icons task-item-menu btn-task-edit" command="show-modal"
+          commandfor="dialog-edit-task">edit</button>
             <button class="material-icons task-item-menu btn-task-delete">delete</button>
             </div>
           </div>

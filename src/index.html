@@ -21,19 +21,19 @@
       <div class="logo">Owari</div>
       <nav>
         <ul class="nav-list">
-          <li class="nav-item active default" data-filter="home">
+          <li class="nav-item active default" data-filter="all">
             <div class="list">
               <!-- <div class="list-icon"></div> -->
-              <p class="list-title">Home</p>
+              <p class="list-title">All</p>
             </div>
-            <span class="list-count count-all-todos" data-list="home">2</span>
+            <span class="list-count count-all-todos" data-list="all"></span>
           </li>
           <li class="nav-item" data-filter="fun">
             <div class="list">
               <div class="list-icon"></div>
               <p class="list-title">Fun</p>
             </div>
-            <span class="list-count" data-list="fun">0</span>
+            <span class="list-count" data-list="fun"></span>
           </li>
         </ul>
         <button
@@ -71,7 +71,7 @@
             <input type="text" name="taskDescription" id="task" required />
           </div>
           <div class="field" id="field-date">
-            <label for="task">Date</label>
+            <label for="date">Date</label>
             <input type="date" name="date" id="date" />
           </div>
           <div class="field" id="field-list">
@@ -121,6 +121,52 @@
               Close
             </button>
             <button class="form-list-save" type="submit">Save</button>
+          </div>
+        </form>
+      </dialog>
+      <dialog id="dialog-edit-task">
+        <form class="form-edit-task" method="dialog">
+          <h2>Edit Task</h2>
+          <div class="field" id="field-task">
+            <label for="edit-task">Task</label>
+            <input type="text" name="taskDescription" id="edit-task" required />
+          </div>
+          <div class="field" id="field-date">
+            <label for="edit-date">Date</label>
+            <input type="date" name="date" id="edit-date" />
+          </div>
+          <div class="field" id="field-list">
+            <label for="edit-list">List</label>
+            <select name="taskList" id="edit-list" required>
+              <option value="">Please choose a list</option>
+              <option value="fun">Fun</option>
+            </select>
+          </div>
+          <input
+            type="hidden"
+            id="hidden-form-todo-id"
+            name="hiddenFormTodoId"
+          />
+          <input
+            type="hidden"
+            id="hidden-form-todo-assigned-list"
+            name="hiddenFormTodoAssignedList"
+          />
+          <input
+            type="hidden"
+            id="hidden-form-todo-icon-color"
+            name="hiddenFormTodoIconColor"
+          />
+          <div class="form-edit-task-controls">
+            <button
+              class="form-edit-task-close"
+              type="button"
+              commandfor="dialog-edit-task"
+              command="close"
+            >
+              Close
+            </button>
+            <button class="form-edit-task-save" type="submit">Save</button>
           </div>
         </form>
       </dialog>

@@ -17,7 +17,14 @@ class TodoList {
       return item._id === todoId;
     });
     this._list.splice(todoIndex, 1);
+  }
+
+  findTodo(todoId) {
     console.log(this._list);
+    const item = this._list.find((item) => {
+      return item._id === todoId;
+    });
+    return item;
   }
 
   get list() {

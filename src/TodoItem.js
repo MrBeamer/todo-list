@@ -3,7 +3,7 @@ class TodoItem {
   _id = crypto.randomUUID();
   _iconColor = "";
   _assignedListId = "";
-  constructor(description, dueDate = "none", assignedListTitle = "home") {
+  constructor(description, dueDate = "none", assignedListTitle = "all") {
     // this._title = title;  // not used right now
     this._description = description;
     this._dueDate = dueDate;
@@ -75,6 +75,15 @@ class TodoItem {
       3: "high",
     };
     this._priority = lookUp[input];
+  }
+
+  update(description, date, listTitle, iconColor) {
+    console.log("update:");
+    console.log(iconColor);
+    this._description = description;
+    this._dueDate = date;
+    this._assignedListTitle = listTitle;
+    this._iconColor = iconColor;
   }
 }
 

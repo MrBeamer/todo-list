@@ -3,15 +3,18 @@ import { TodoView } from "./TodoView.js";
 import { TodoModel } from "./TodoModel.js";
 import { TodoList } from "./TodoList.js";
 
-// add edit task, delete task to every todo-item
-// When adding a task while filtered it needs to reset active view or move to the correct todlist, t global variable like unfiltered and filtered state - while filtered do that while unfiltered to that
+// add edit task to every todo-item
 // Format date correctly and add auto update current date to headline
+// Format date "2018-07-22" to prefill form
 // last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
+
+//TODO NExt tomorrow:
+// delete from every hiddenFormTodoIconColor  i think its not needed
 
 class TodoController {
   _view = new TodoView();
   _model = new TodoModel();
-  _activeFilter = "home"; // home is default list like all
+  _activeFilter = "all"; // all is default list like all
 
   constructor() {
     this._view._tasklist.addEventListener("click", (event) =>
@@ -30,11 +33,18 @@ class TodoController {
     });
 
     this._view._tasklist.addEventListener("click", (event) =>
-      this.handleUpdateDelete(event),
+      this.handleDelete(event),
+    );
+
+    this._view._formEditTask.addEventListener("submit", (event) =>
+      this.handleUpdate(event),
+    );
+    this._view._tasklist.addEventListener("click", (event) =>
+      this.handlePrefillForm(event),
     );
   }
 
-  handleUpdateDelete(event) {
+  handlePrefillForm(event) {
     const todoMenu = event.target.closest(".task-item-menu");
     const todoCard = event.target.closest(".task-item");
     const assignedList = todoCard.dataset.assignedList;
@@ -45,12 +55,97 @@ class TodoController {
     const todoList = this._model.findTodoList(assignedList);
     // Based on click pass todo in delete or edit
     if (todoMenu.classList.contains("btn-task-edit")) {
-      console.log("edit");
-    } else if (todoMenu.classList.contains("btn-task-delete")) {
+      // Find clicked todo-item in todo-list
+      const todoItem = todoList.findTodo(todoId);
+      //Prefills the edit-form based on clicked todo-item - UI
+      this._view.prefillEditForm(
+        todoItem._description,
+        todoItem._dueDate,
+        todoItem._assignedListTitle,
+        todoItem._id,
+        todoItem._iconColor,
+      );
+    }
+  }
+
+  handleUpdate(event) {
+    // Prevent form native behavior (rerendering after submit)
+    event.preventDefault();
+    // Get data from form submission
+    const formData = new FormData(event.target);
+    const dataObj = Object.fromEntries(formData.entries());
+    // Destructuring of the object
+    const {
+      taskDescription,
+      date,
+      taskList,
+      hiddenFormTodoId,
+      hiddenFormTodoAssignedList,
+    } = dataObj;
+    // Find todo-list before submit / old list before submit
+    const todoListBeforeSubmit = this._model.findTodoList(
+      hiddenFormTodoAssignedList,
+    );
+    // Find todo-list after submit / new assigned list after submit
+    const todoListAfterSubmit = this._model.findTodoList(taskList);
+
+    // Get updated icon color from newly assigned todo-list
+    const newIconColor = todoListAfterSubmit._iconColor;
+    console.log("edit");
+    // Find clicked todo-item in todo-list before submission
+    const todoItem = todoListBeforeSubmit.findTodo(hiddenFormTodoId);
+    console.log(todoItem);
+    // Data entry update todo-item
+    todoItem.update(taskDescription, date, taskList, newIconColor); //error must be in update
+    console.log(todoItem);
+
+    // Delete todo-item from list before submission - Data entry need to update todo-list
+    todoListBeforeSubmit.deleteItem(todoItem);
+    // Add todo-item to updated list after submission - Data entry need to update todo-list
+    todoListAfterSubmit.addItem(todoItem);
+
+    // Update todo-card  - UI
+    this._view.updateTaskCard(
+      taskDescription,
+      date,
+      taskList,
+      hiddenFormTodoId,
+      newIconColor,
+    );
+
+    // Update todo-list counter - UI
+    this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
+
+    // Update current displayed tasklist after edit of a todo - UI
+    this._view.renderFilteredTasks(todoListBeforeSubmit.list);
+
+    // Close window after submit
+    this._view._dialogEditTask.close();
+  }
+
+  handleDelete(event) {
+    const todoMenu = event.target.closest(".task-item-menu");
+    const todoCard = event.target.closest(".task-item");
+    const assignedList = todoCard.dataset.assignedList;
+    const todoId = todoCard.dataset.todoId;
+    if (!todoMenu) return;
+    // Find todo-list
+    const todoList = this._model.findTodoList(assignedList);
+    // Based on click pass todo in delete or edit
+    if (todoMenu.classList.contains("btn-task-delete")) {
       // Find todo in list and delete from Database
       todoList.deleteItem(todoId);
+      // Find todo in the allTodolist (model) and delete from Database
+      this._model.deleteFromAllTodos(todoId);
       // Find todo html element and delete it from UI
       this._view.deleteTask(todoId);
+      // Update todo-list counter UI
+      this._view.updateListCounter(
+        this._model._todoLists,
+        this._model.allTodos,
+      );
+
+      console.log(this._model.allTodos);
     }
   }
 
@@ -66,7 +161,6 @@ class TodoController {
     // Get the array from the todo-list object and then filter for the correct todo-item (data entry)
     const todoItem = todoList._list.find((todo) => todo._id === checkBox.id);
     todoItem.toggleIsChecked();
-    console.log(todoItem);
   }
 
   createTodoItem(dataObj) {
@@ -110,12 +204,17 @@ class TodoController {
     if (this._activeFilter === todoItem._assignedListTitle)
       this._view.renderTask(todoItem);
 
-    // Update todo-list counter UI
-    this._view.updateListCounter(todoItem, todoList);
-    // Update total count of todos from home - UI
-    this._view.updateTotalCount(this._model.allTodos);
+    // Update todo-list counter and total count of todos from all - UI
+    console.log(this._model.allTodos);
+    this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
+
+    // Update the tab "all" todo-list when a new task is created  - UI
+    this._view.renderFilteredTasks(this._model.allTodos);
+
     // Close window after submit
     this._view._dialogTask.close();
+    // Reset input fields after submit
+    this._view._formTask.reset();
   }
 
   // Get data from list form
@@ -175,10 +274,10 @@ class TodoController {
   init() {
     const todoItem1 = new TodoItem(
       "Watch Netflix - Vinland Saga",
-      "20.05.2026",
+      "2026-07-22",
       "fun",
     );
-    const todoItem2 = new TodoItem("  Learn Coding", "20.04.2026", "fun");
+    const todoItem2 = new TodoItem("  Learn Coding", "2026-04-21", "fun");
 
     const todoList1 = this._model.findTodoList(todoItem1._assignedListTitle);
     const todoList2 = this._model.findTodoList(todoItem2._assignedListTitle);
@@ -196,10 +295,8 @@ class TodoController {
     this._view.renderTask(todoItem1);
     this._view.renderTask(todoItem2);
 
-    this._view.updateListCounter(todoItem1, todoList1);
-    this._view.updateListCounter(todoItem2, todoList2);
+    this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
     console.log("init");
-    console.log(this._model._allTodos);
   }
 }
 

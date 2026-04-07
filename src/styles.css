@@ -5,6 +5,8 @@
   --quaternary-color: #000000;
   --text-secondary-color: #737373;
   --text-date-color: #9d9d9d;
+  --icon-delete-color: red;
+  --border: #ebebeb;
 }
 
 * {
@@ -160,6 +162,16 @@ button {
   padding: 20px 30px;
   background-color: var(--primary-color);
   color: var(--quaternary-color);
+  border: 1px solid #ebebeb;
+
+  transition:
+    border-color 0.12s,
+    box-shadow 0.12s;
+}
+
+.task-item:hover {
+  border-color: #d6d6d6;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.04);
 }
 
 .task-item-right {
@@ -192,10 +204,19 @@ button {
 .task-item-menu {
   font-size: 18px;
   border: none;
-  color: var(--text-date-color);
+  color: rgb(176, 176, 176);
   background-color: transparent;
-  border-radius: 15px;
-  padding: 8px 4px 8px 4px;
+  border-radius: 8px;
+  padding: 8px 6px 8px 6px;
+}
+
+.btn-task-delete:hover {
+  color: var(--icon-delete-color);
+  background-color: rgba(255, 0, 0, 0.04);
+}
+
+.btn-task-edit:hover {
+  background-color: #f6f6f6;
 }
 
 input[type="checkbox"] {
@@ -257,7 +278,8 @@ label {
 
 /* Dialog - Styles */
 #dialog-create-task,
-#dialog-create-list {
+#dialog-create-list,
+#dialog-edit-task {
   position: absolute;
   top: 10%;
   left: 28%;
@@ -267,7 +289,8 @@ label {
 }
 
 .form-task,
-.form-list {
+.form-list,
+.form-edit-task {
   padding: 30px 25px 30px 25px;
   flex-direction: column;
   display: flex;
@@ -298,14 +321,16 @@ label {
 }
 
 .form-task-controls,
-.form-list-controls {
+.form-list-controls,
+.form-edit-task-controls {
   display: flex;
   justify-content: end;
   gap: 8px;
   margin-top: 10px;
 }
 .form-task-close,
-.form-list-close {
+.form-list-close,
+.form-edit-task-close {
   border: none;
   color: var(--quaternary-color);
   background-color: transparent;
@@ -316,7 +341,8 @@ label {
 }
 
 .form-task-save,
-.form-list-save {
+.form-list-save,
+.form-edit-task-save {
   border: none;
   color: var(--primary-color);
   background-color: var(--quaternary-color);

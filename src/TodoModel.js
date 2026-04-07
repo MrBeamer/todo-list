@@ -4,11 +4,11 @@ import { TodoItem } from "./TodoItem.js";
 import { TodoList } from "./TodoList.js";
 
 // delete later just for testing list system
-const home = new TodoList("home", "#d2fb03ff");
+const all = new TodoList("all", "#d2fb03ff");
 const fun = new TodoList("fun", "#036afb");
 
 class TodoModel {
-  _todoLists = [home, fun];
+  _todoLists = [all, fun];
   _allTodos = [];
 
   updateList() {
@@ -27,8 +27,11 @@ class TodoModel {
     this._todoLists.push(list);
   }
 
-  deleteList() {
-    //placeholder
+  deleteFromAllTodos(todoId) {
+    const todoIndex = this._allTodos.findIndex((item) => {
+      return item._id === todoId;
+    });
+    this._allTodos.splice(todoIndex, 1);
   }
   get todoLists() {
     return this._todoLists;
