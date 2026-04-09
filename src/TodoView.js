@@ -1,4 +1,5 @@
 import { capitalize } from "./helper.js";
+import { formateDate } from "./helper.js";
 
 class TodoView {
   _tasklist = document.querySelector("#main-task-list");
@@ -25,9 +26,8 @@ class TodoView {
   _hiddenFieldEditFormIconColor = document.querySelector(
     "#hidden-form-todo-icon-color",
   );
-  // _listCounters = document.querySelectorAll(".list-count");
-
-  constructor() {}
+  _headerDate = document.querySelector(".intro-date");
+  _headerWelcome = document.querySelector(".intro-welcome");
 
   deleteTask(todoId) {
     for (let taskItem of this._tasklist.children) {
@@ -35,6 +35,11 @@ class TodoView {
         taskItem.remove();
       }
     }
+  }
+
+  renderIntro(currentDate, calcTimePhrase) {
+    this._headerDate.textContent = currentDate;
+    this._headerWelcome.textContent = `Good ${calcTimePhrase()}, Michael.`;
   }
 
   prefillEditForm(description, date, assignedListTitle, todoId, iconColor) {
@@ -54,7 +59,7 @@ class TodoView {
         let todoCheckbox = taskItem.querySelector("input");
         let todoIconColor = taskItem.querySelector(".list-icon");
         todoDescription.textContent = description;
-        todoDate.textContent = date;
+        todoDate.textContent = formateDate(date, "ger");
         taskItem.dataset.assignedList = assignedListTitle;
         todoCheckbox.dataset.assignedList = assignedListTitle;
         todoIconColor.style.backgroundColor = iconColor;
@@ -73,7 +78,7 @@ class TodoView {
             <div class="list-icon" style="background-color: ${todoItem._iconColor}"></div>
           </div>
           <div class="task-item-right">
-            <div class="task-item-date">${todoItem._dueDate}</div>
+            <div class="task-item-date">${formateDate(todoItem._dueDate, "ger")}</div>
             <div class="task-item-menu-container"> 
             <button class="material-icons task-item-menu btn-task-edit" command="show-modal"
           commandfor="dialog-edit-task">edit</button>
@@ -109,7 +114,6 @@ class TodoView {
   }
 
   updateListCounter(listOfTodoLists, allTodosList) {
-    console.log(allTodosList.length);
     const listCounters = document.querySelectorAll(".list-count"); // here until I have local memory because it needs to refresh other wise it will only capture the prerender elements, after local memory move it up to the other queries and add the function at the end of the file
     for (let listCounter of listCounters) {
       for (let todoList of listOfTodoLists) {
@@ -118,7 +122,6 @@ class TodoView {
         }
       }
     }
-    console.log(allTodosList.length);
     this._countAllTodos.textContent = allTodosList.length; // moving it here fixed the initial 0 for all - but I do not why maybe check if any other list ist called home?
   }
 
@@ -133,7 +136,7 @@ class TodoView {
             <div class="list-icon" style="background-color: ${todo._iconColor}"></div>
           </div>
           <div class="task-item-right">
-            <div class="task-item-date">${todo._dueDate}</div>
+            <div class="task-item-date">${formateDate(todo._dueDate, "ger")}</div>
             <div class="task-item-menu-container"> 
             <button class="material-icons task-item-menu btn-task-edit" command="show-modal"
           commandfor="dialog-edit-task">edit</button>

@@ -2,14 +2,14 @@ import { TodoItem } from "./TodoItem.js";
 import { TodoView } from "./TodoView.js";
 import { TodoModel } from "./TodoModel.js";
 import { TodoList } from "./TodoList.js";
+import { currentDate } from "./helper.js";
+import { calcTimePhrase } from "./helper.js";
 
-// add edit task to every todo-item
-// Format date correctly and add auto update current date to headline
-// Format date "2018-07-22" to prefill form
 // last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
 
-//TODO NExt tomorrow:
 // delete from every hiddenFormTodoIconColor  i think its not needed
+
+// if in all editing a todo it will delete all todos, while moving the edited todo in the correct list
 
 class TodoController {
   _view = new TodoView();
@@ -21,11 +21,11 @@ class TodoController {
       this.handleCheckedState(event),
     );
     this._view._formTask.addEventListener("submit", (event) =>
-      this.getTaskFormData(event),
+      this.handleTaskFormData(event),
     );
 
     this._view._formList.addEventListener("submit", (event) =>
-      this.getListFormData(event),
+      this.handleListFormData(event),
     );
 
     this._view._navList.addEventListener("click", (event) => {
@@ -119,6 +119,12 @@ class TodoController {
     // Update current displayed tasklist after edit of a todo - UI
     this._view.renderFilteredTasks(todoListBeforeSubmit.list);
 
+    // Check if active filter is all, to prevent that all todos get rendered for other todo-lists
+    if (this._activeFilter === "all") {
+      // Update the tab "all" todo-list when a new task is created  - UI
+      this._view.renderFilteredTasks(this._model.allTodos);
+    }
+
     // Close window after submit
     this._view._dialogEditTask.close();
   }
@@ -175,7 +181,7 @@ class TodoController {
   }
 
   // Get data from task form
-  getTaskFormData(event) {
+  handleTaskFormData(event) {
     event.preventDefault();
     // Get data from form submission
     const data = new FormData(event.target);
@@ -208,8 +214,11 @@ class TodoController {
     console.log(this._model.allTodos);
     this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
 
-    // Update the tab "all" todo-list when a new task is created  - UI
-    this._view.renderFilteredTasks(this._model.allTodos);
+    // Check if active filter is all, to prevent that all todos get rendered for other todo-lists
+    if (this._activeFilter === "all") {
+      // Update the tab "all" todo-list when a new task is created  - UI
+      this._view.renderFilteredTasks(this._model.allTodos);
+    }
 
     // Close window after submit
     this._view._dialogTask.close();
@@ -218,7 +227,7 @@ class TodoController {
   }
 
   // Get data from list form
-  getListFormData(event) {
+  handleListFormData(event) {
     event.preventDefault();
     const data = new FormData(event.target);
     const dataObj = Object.fromEntries(data.entries());
@@ -244,6 +253,8 @@ class TodoController {
   handleListFilter(event) {
     // Get HTML Element with the class nav-item
     const navItem = event.target.closest(".nav-item");
+    // Get from the HTML Element the filter-name
+    const filter = navItem.dataset.filter;
 
     // If navItem is the default one - render all todos from every list and return
     if (navItem.classList.contains("default")) {
@@ -252,15 +263,19 @@ class TodoController {
       // Cleans taskList and renders the todo-list which holds all todos
       const allTodoList = this._model.allTodos;
       this._view.renderFilteredTasks(allTodoList);
+      // Use dataset to set active filter
+      console.log(this._activeFilter);
+      this._activeFilter = filter;
+      console.log(this._activeFilter);
       return;
     }
 
-    // Get from the HTML Element the filter-name
-    const filter = navItem.dataset.filter;
     // Find based on the filter-name the corresponding todo-list
     const todoList = this._model.findTodoList(filter);
+
     // Use dataset to set active filter
     this._activeFilter = filter;
+    console.log(this._activeFilter);
 
     // Update active filter - background-color
     this._view.updateActiveFilter(todoList);
@@ -272,6 +287,7 @@ class TodoController {
   }
 
   init() {
+    this._view.renderIntro(currentDate, calcTimePhrase);
     const todoItem1 = new TodoItem(
       "Watch Netflix - Vinland Saga",
       "2026-07-22",
