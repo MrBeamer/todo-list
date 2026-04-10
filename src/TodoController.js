@@ -4,12 +4,14 @@ import { TodoModel } from "./TodoModel.js";
 import { TodoList } from "./TodoList.js";
 import { currentDate } from "./helper.js";
 import { calcTimePhrase } from "./helper.js";
+import { StorageService } from "./StorageService.js";
 
 // last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
 
 class TodoController {
   _view = new TodoView();
   _model = new TodoModel();
+  _storageService = new StorageService();
   _activeFilter = "all"; // all is default list like all
 
   constructor() {
@@ -109,8 +111,7 @@ class TodoController {
 
     // Update todo-list counter - UI
     this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
-    console.log("just before render function:");
-    console.log(todoListBeforeSubmit.list);
+
     // Update current displayed tasklist after edit of a todo - UI
     this._view.renderFilteredTasks(todoListBeforeSubmit.list);
 
@@ -119,6 +120,10 @@ class TodoController {
       // Update the tab "all" todo-list when a new task is created  - UI
       this._view.renderFilteredTasks(this._model.allTodos);
     }
+
+    // Saves list to locale storage
+    this._storageService.saveTodoLists(this._model._todoLists);
+    this._storageService.saveAllTodosList(this._model.allTodos);
 
     // Close window after submit
     this._view._dialogEditTask.close();
@@ -146,6 +151,9 @@ class TodoController {
         this._model.allTodos,
       );
     }
+    // Saves list to locale storage
+    this._storageService.saveTodoLists(this._model._todoLists);
+    this._storageService.saveAllTodosList(this._model.allTodos);
   }
 
   handleCheckedState(event) {
@@ -210,6 +218,10 @@ class TodoController {
       this._view.renderFilteredTasks(this._model.allTodos);
     }
 
+    // Saves list to locale storage
+    this._storageService.saveTodoLists(this._model._todoLists);
+    this._storageService.saveAllTodosList(this._model.allTodos);
+
     // Close window after submit
     this._view._dialogTask.close();
     // Reset input fields after submit
@@ -243,20 +255,16 @@ class TodoController {
     const navItem = event.target.closest(".nav-item");
     // Get from the HTML Element the filter-name
     const filter = navItem.dataset.filter;
-
     // If navItem is the default one - render all todos from every list and return
     if (navItem.classList.contains("default")) {
       // Update active filter - background-color
       this._view.updateActiveFilter(navItem);
+
       // Cleans taskList and renders the todo-list which holds all todos
-      const allTodoList = this._model.allTodos;
-      this._view.renderFilteredTasks(allTodoList);
+      this._view.renderFilteredTasks(this._model.allTodos);
+
       // Use dataset to set active filter
-      console.log("Filter before switch: ");
-      console.log(this._activeFilter);
       this._activeFilter = filter;
-      console.log("Filter after switch: ");
-      console.log(this._activeFilter);
       return;
     }
 
@@ -265,51 +273,54 @@ class TodoController {
 
     // Use dataset to set active filter
     this._activeFilter = filter;
-    console.log("Third filter: ");
-    console.log(this._activeFilter);
 
     // Update active filter - background-color
     this._view.updateActiveFilter(todoList);
 
     // Else clean tasklist and render the filtered todo-list
     this._view.renderFilteredTasks(todoList._list);
+
     // If the todo-list is empty - do nothing
     if (todoList._list.length === 0) return;
   }
-
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////
   init() {
-    // Renders the dynamic date
+    // // Renders the dynamic date
     this._view.renderIntro(currentDate, calcTimePhrase);
+    // Makes sure that the app runs with empty local storage
+    if (
+      this._storageService.todoLists === null ||
+      this._storageService.allTodosList === null
+    ) {
+      return;
+    }
 
-    // Creates Dummy Data
-    const fun = new TodoList("fun", "#036afb");
-    this._model.todoLists.push(fun);
-
-    const todoItem1 = new TodoItem(
-      "Watch Netflix - Vinland Saga",
-      "2026-07-22",
-      "fun",
+    // Rehydration for todo-lists because of locale storage
+    const storageTodoLists = this._storageService.todoLists.map((todoList) =>
+      TodoList.fromJSON(todoList),
     );
-    const todoItem2 = new TodoItem("  Learn Coding", "2026-04-21", "fun");
 
-    const todoList1 = this._model.findTodoList(todoItem1._assignedListTitle);
-    const todoList2 = this._model.findTodoList(todoItem2._assignedListTitle);
+    const storageAllTodosList = this._storageService.allTodosList.map((todo) =>
+      TodoItem.fromJSON(todo),
+    );
 
-    const iconColor1 = todoList1._iconColor;
-    const iconColor2 = todoList2._iconColor;
-    todoItem1._iconColor = iconColor1;
-    todoItem2._iconColor = iconColor2;
+    // Initialize local storage - Data
+    this._model._todoLists = storageTodoLists;
+    this._model.allTodos = storageAllTodosList;
 
-    todoList1.addItem(todoItem1);
-    todoList2.addItem(todoItem2);
-    this._model.addToAllTodos(todoItem1);
-    this._model.addToAllTodos(todoItem2);
+    // Normalize the data at the call site, renders todo-list navigation - UI
+    this._model._todoLists.forEach((todoList) =>
+      this._view.renderNavList({
+        listTitle: todoList._title,
+        iconColor: todoList._iconColor,
+      }),
+    );
 
-    this._view.renderTask(todoItem1);
-    this._view.renderTask(todoItem2);
+    // Renders all todo-item cards - UI
+    this._model.allTodos.forEach((todoItem) => this._view.renderTask(todoItem));
 
+    // Renders Counters - UI
     this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
-    console.log("init");
   }
 }
 

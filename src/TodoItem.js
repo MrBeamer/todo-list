@@ -3,7 +3,7 @@ class TodoItem {
   _id = crypto.randomUUID();
   _iconColor = "";
   _assignedListId = "";
-  constructor(description, dueDate = "none", assignedListTitle = "all") {
+  constructor(description, dueDate = "none", assignedListTitle) {
     // this._title = title;  // not used right now
     this._description = description;
     this._dueDate = dueDate;
@@ -82,6 +82,21 @@ class TodoItem {
     this._dueDate = date;
     this._assignedListTitle = listTitle;
     this._iconColor = iconColor;
+  }
+
+  static fromJSON(obj) {
+    const item = new TodoItem(
+      obj._description,
+      obj._dueDate,
+      obj._assignedListTitle,
+    );
+
+    item._id = obj._id;
+    item._isChecked = obj._isChecked;
+    item._iconColor = obj._iconColor;
+    item._assignedListId = obj._assignedListId;
+
+    return item;
   }
 }
 

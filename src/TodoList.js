@@ -1,4 +1,4 @@
-// A list should hold color code and the title
+import { TodoItem } from "./TodoItem.js";
 
 class TodoList {
   _list = [];
@@ -14,15 +14,12 @@ class TodoList {
 
   deleteItem(todoId) {
     const todoIndex = this._list.findIndex((item) => {
-      console.log("what is the toID:");
-      console.log(todoId);
       return item._id === todoId;
     });
     this._list.splice(todoIndex, 1);
   }
 
   findTodo(todoId) {
-    console.log(this._list);
     const item = this._list.find((item) => {
       return item._id === todoId;
     });
@@ -39,6 +36,13 @@ class TodoList {
 
   set title(title) {
     this._title = title;
+  }
+
+  static fromJSON(obj) {
+    const list = new TodoList(obj._title, obj._iconColor);
+    list._id = obj._id;
+    list._list = obj._list.map((element) => TodoItem.fromJSON(element));
+    return list;
   }
 }
 

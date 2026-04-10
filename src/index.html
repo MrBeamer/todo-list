@@ -23,17 +23,9 @@
         <ul class="nav-list">
           <li class="nav-item active default" data-filter="all">
             <div class="list">
-              <!-- <div class="list-icon"></div> -->
               <p class="list-title">All</p>
             </div>
             <span class="list-count count-all-todos" data-list="all"></span>
-          </li>
-          <li class="nav-item" data-filter="fun">
-            <div class="list">
-              <div class="list-icon"></div>
-              <p class="list-title">Fun</p>
-            </div>
-            <span class="list-count" data-list="fun"></span>
           </li>
         </ul>
         <button
@@ -68,17 +60,30 @@
           <h2>New Task</h2>
           <div class="field" id="field-task">
             <label for="task">Task</label>
-            <input type="text" name="taskDescription" id="task" required />
+            <input
+              type="text"
+              name="taskDescription"
+              id="task"
+              minlength="1"
+              maxlength="72"
+              required
+            />
           </div>
           <div class="field" id="field-date">
             <label for="date">Date</label>
-            <input type="date" name="date" id="date" />
+            <input
+              type="date"
+              name="date"
+              id="date"
+              min="2026-01-01"
+              max="2126-12-31"
+              required
+            />
           </div>
           <div class="field" id="field-list">
             <label for="list">List</label>
             <select name="taskList" id="list" required>
               <option value="">Please choose a list</option>
-              <option value="fun">Fun</option>
             </select>
           </div>
           <div class="form-task-controls">
@@ -100,7 +105,13 @@
           <h2>New List</h2>
           <div class="field" id="field-listTitle">
             <label for="listTitle">List Name</label>
-            <input type="text" name="listTitle" id="listTitle" />
+            <input
+              type="text"
+              name="listTitle"
+              id="listTitle"
+              minlength="1"
+              maxlength="20"
+            />
           </div>
           <div class="field" id="field-iconColor">
             <label for="iconColor">Icon Color</label>

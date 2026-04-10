@@ -95,14 +95,15 @@ class TodoView {
     this._selectEditForm.insertAdjacentHTML("beforeend", optionHtmlElement);
   }
 
-  renderNavList(dataObj) {
-    const title = capitalize(dataObj.listTitle);
-    const navListHtmlElement = `<li class="nav-item" data-filter="${title.toLowerCase()}">
+  renderNavList({ listTitle, iconColor }) {
+    // used destructuring
+
+    const navListHtmlElement = `<li class="nav-item" data-filter="${listTitle.toLowerCase()}">
             <div class="list">
-              <div class="list-icon" style="background-color: ${dataObj.iconColor}"></div>
-              <p class="list-title">${title}</p>
+              <div class="list-icon" style="background-color: ${iconColor}"></div>
+              <p class="list-title">${capitalize(listTitle)}</p>
             </div>
-            <span class="list-count" data-list="${title.toLowerCase()}">0</span>
+            <span class="list-count" data-list="${listTitle.toLowerCase()}">0</span>
           </li>`;
 
     this._navList.insertAdjacentHTML("beforeend", navListHtmlElement);

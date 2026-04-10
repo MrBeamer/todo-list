@@ -14,6 +14,10 @@ class TodoModel {
     return this._allTodos;
   }
 
+  set allTodos(arr) {
+    this._allTodos = arr;
+  }
+
   addList(list) {
     this._todoLists.push(list);
   }

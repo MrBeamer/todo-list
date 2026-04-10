@@ -31,4 +31,10 @@ const calcTimePhrase = () => {
   return "Night";
 };
 
+// Get local storage
+const getLocalStorage = (listStr) => {
+  const json = localStorage.getItem(`${listStr}`);
+  return JSON.parse(json);
+};
+
 export { capitalize, currentDate, calcTimePhrase, formateDate };
