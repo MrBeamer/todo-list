@@ -7,10 +7,6 @@ import { calcTimePhrase } from "./helper.js";
 
 // last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
 
-// delete from every hiddenFormTodoIconColor  i think its not needed
-
-// if in all editing a todo it will delete all todos, while moving the edited todo in the correct list
-
 class TodoController {
   _view = new TodoView();
   _model = new TodoModel();
@@ -91,16 +87,14 @@ class TodoController {
 
     // Get updated icon color from newly assigned todo-list
     const newIconColor = todoListAfterSubmit._iconColor;
-    console.log("edit");
     // Find clicked todo-item in todo-list before submission
     const todoItem = todoListBeforeSubmit.findTodo(hiddenFormTodoId);
-    console.log(todoItem);
+
     // Data entry update todo-item
     todoItem.update(taskDescription, date, taskList, newIconColor); //error must be in update
-    console.log(todoItem);
 
     // Delete todo-item from list before submission - Data entry need to update todo-list
-    todoListBeforeSubmit.deleteItem(todoItem);
+    todoListBeforeSubmit.deleteItem(todoItem._id);
     // Add todo-item to updated list after submission - Data entry need to update todo-list
     todoListAfterSubmit.addItem(todoItem);
 
@@ -115,7 +109,8 @@ class TodoController {
 
     // Update todo-list counter - UI
     this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
-
+    console.log("just before render function:");
+    console.log(todoListBeforeSubmit.list);
     // Update current displayed tasklist after edit of a todo - UI
     this._view.renderFilteredTasks(todoListBeforeSubmit.list);
 
@@ -150,8 +145,6 @@ class TodoController {
         this._model._todoLists,
         this._model.allTodos,
       );
-
-      console.log(this._model.allTodos);
     }
   }
 
@@ -202,8 +195,6 @@ class TodoController {
     todoList.addItem(todoItem);
     // Additionally push it to a list that holds all todos
     this._model.addToAllTodos(todoItem);
-    console.log(todoItem);
-    console.log(this._model.todoLists);
 
     // Add todo to UI, only if active filter equals newly created assignedListTitle of todo-item
     // Makes sure that the todoitem renders in the correct list and not in the current displayed list
@@ -211,7 +202,6 @@ class TodoController {
       this._view.renderTask(todoItem);
 
     // Update todo-list counter and total count of todos from all - UI
-    console.log(this._model.allTodos);
     this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
 
     // Check if active filter is all, to prevent that all todos get rendered for other todo-lists
@@ -231,14 +221,12 @@ class TodoController {
     event.preventDefault();
     const data = new FormData(event.target);
     const dataObj = Object.fromEntries(data.entries());
-    console.log(dataObj);
 
     // Create database entry for new list
     const todoList = this.createTodoList(dataObj);
 
     // Push new todo-list into list of todo-lists
     this._model.addList(todoList);
-    console.log(this._model.todoLists);
 
     // Render todo list in navigation and icon
     this._view.renderNavList(dataObj);
@@ -264,8 +252,10 @@ class TodoController {
       const allTodoList = this._model.allTodos;
       this._view.renderFilteredTasks(allTodoList);
       // Use dataset to set active filter
+      console.log("Filter before switch: ");
       console.log(this._activeFilter);
       this._activeFilter = filter;
+      console.log("Filter after switch: ");
       console.log(this._activeFilter);
       return;
     }
@@ -275,6 +265,7 @@ class TodoController {
 
     // Use dataset to set active filter
     this._activeFilter = filter;
+    console.log("Third filter: ");
     console.log(this._activeFilter);
 
     // Update active filter - background-color
@@ -287,7 +278,13 @@ class TodoController {
   }
 
   init() {
+    // Renders the dynamic date
     this._view.renderIntro(currentDate, calcTimePhrase);
+
+    // Creates Dummy Data
+    const fun = new TodoList("fun", "#036afb");
+    this._model.todoLists.push(fun);
+
     const todoItem1 = new TodoItem(
       "Watch Netflix - Vinland Saga",
       "2026-07-22",

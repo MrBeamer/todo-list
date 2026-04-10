@@ -78,8 +78,6 @@ class TodoItem {
   }
 
   update(description, date, listTitle, iconColor) {
-    console.log("update:");
-    console.log(iconColor);
     this._description = description;
     this._dueDate = date;
     this._assignedListTitle = listTitle;

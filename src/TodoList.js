@@ -14,6 +14,8 @@ class TodoList {
 
   deleteItem(todoId) {
     const todoIndex = this._list.findIndex((item) => {
+      console.log("what is the toID:");
+      console.log(todoId);
       return item._id === todoId;
     });
     this._list.splice(todoIndex, 1);

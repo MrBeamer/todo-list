@@ -23,9 +23,7 @@ class TodoView {
   _hiddenFieldEditFormAssignedListTitle = document.querySelector(
     "#hidden-form-todo-assigned-list",
   );
-  _hiddenFieldEditFormIconColor = document.querySelector(
-    "#hidden-form-todo-icon-color",
-  );
+
   _headerDate = document.querySelector(".intro-date");
   _headerWelcome = document.querySelector(".intro-welcome");
 
@@ -42,13 +40,12 @@ class TodoView {
     this._headerWelcome.textContent = `Good ${calcTimePhrase()}, Michael.`;
   }
 
-  prefillEditForm(description, date, assignedListTitle, todoId, iconColor) {
+  prefillEditForm(description, date, assignedListTitle, todoId) {
     this._taskEditForm.value = description;
     this._dateEditForm.value = date; // needs to have this format to work "2018-07-22"
     this._listEditForm.value = assignedListTitle;
     this._hiddenFieldEditFormAssignedListTitle.value = assignedListTitle;
     this._hiddenFieldEditForm.value = todoId;
-    this._hiddenFieldEditFormIconColor.value = iconColor;
   }
 
   updateTaskCard(description, date, assignedListTitle, todoId, iconColor) {
@@ -63,8 +60,6 @@ class TodoView {
         taskItem.dataset.assignedList = assignedListTitle;
         todoCheckbox.dataset.assignedList = assignedListTitle;
         todoIconColor.style.backgroundColor = iconColor;
-
-        console.log(assignedListTitle);
       }
     }
   }
