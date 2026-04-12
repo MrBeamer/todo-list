@@ -7,6 +7,9 @@
   --text-date-color: #9d9d9d;
   --icon-delete-color: red;
   --border: #ebebeb;
+  --p-low: #94a3b8;
+  --p-med: #f59e0b;
+  --p-high: #ef4444;
 }
 
 * {
@@ -98,7 +101,7 @@ button {
   gap: 8px;
   color: var(--quaternary-color);
   background-color: var(--secondary-color);
-  border-radius: 15px;
+  border-radius: 8px;
   padding: 12px 10px 12px 18px;
   margin: 0 17px;
   width: 100%; /* remove if button should have justify between */
@@ -139,7 +142,7 @@ button {
 }
 
 .btn-select-date {
-  border-radius: 15px;
+  border-radius: 8px;
   border: none;
   padding: 20px 30px;
   background-color: var(--primary-color);
@@ -181,6 +184,10 @@ button {
 .task-item-left {
   display: flex;
   align-items: center;
+}
+
+.task-item-priority {
+  padding: 12px 10px 12px 18px;
 }
 
 .task-item-date {
@@ -262,7 +269,7 @@ label {
   gap: 8px;
   color: var(--primary-color);
   background-color: var(--quaternary-color);
-  border-radius: 15px;
+  border-radius: 8px;
   padding: 12px 10px 12px 18px;
   width: 100%; /* remove if button should have justify between */
   border: none;
@@ -283,7 +290,7 @@ label {
   position: absolute;
   top: 10%;
   left: 28%;
-  border-radius: 15px;
+  border-radius: 8px;
   width: 380px;
   border: none;
 }
@@ -299,6 +306,7 @@ label {
   label {
     color: var(--text-date-color);
     margin-bottom: 6px;
+    font-size: 16px;
   }
 
   input {
@@ -336,7 +344,7 @@ label {
   background-color: transparent;
   border: 1px solid var(--text-date-color);
   padding: 8px 24px;
-  border-radius: 15px;
+  border-radius: 8px;
   height: 34px;
 }
 
@@ -347,7 +355,7 @@ label {
   color: var(--primary-color);
   background-color: var(--quaternary-color);
   padding: 8px 24px;
-  border-radius: 15px;
+  border-radius: 8px;
   height: 34px;
 }
 
@@ -356,4 +364,66 @@ label {
   padding: 5px 10px;
   height: 38px;
   border-radius: 8px;
+}
+
+.priority-options {
+  display: flex;
+  gap: 8px;
+}
+
+/* btn-priority */
+.priority-option {
+  border: none;
+  color: var(--quaternary-color);
+  background-color: transparent;
+  border: 1px solid var(--text-date-color);
+  padding: 8px 24px;
+  border-radius: 8px;
+  width: 105px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  user-select: none;
+}
+
+.priority-option:has(input:checked).priority-option-low {
+  color: var(--p-low);
+  border-color: var(--p-low);
+  background: #f1f5f9;
+}
+
+.priority-option:has(input:checked).priority-option-medium {
+  color: var(--p-med);
+  border-color: var(--p-med);
+  background: #fffbeb;
+}
+
+.priority-option:has(input:checked).priority-option-high {
+  color: var(--p-high);
+  border-color: var(--p-high);
+  background: #fef2f2;
+}
+
+.priority-option:hover {
+  border-color: #8f8e8e;
+  color: #5a5a5a;
+}
+
+.priority-option input {
+  display: none;
+}
+
+/* Hide radio */
+.priority-icon {
+  width: 20px;
+  height: auto;
+}
+
+.priority-label {
+  margin-bottom: 10px;
+  color: var(--text-date-color);
+  font-size: 16px;
+}
+label.priority-tag {
+  color: var(--text-date-color);
+  font-size: 14px;
 }

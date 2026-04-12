@@ -7,6 +7,12 @@ import { calcTimePhrase } from "./helper.js";
 import { StorageService } from "./StorageService.js";
 
 // last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
+// Add prioties
+// place the dialogs at better positions
+// Refactor code
+//fix when somebody uses numbers as todo-list name renderformdropdown function breaks because of capitalize ad lowercase
+// Bugs when rerendering with local storage, dropdown list disappears
+// add priority to edit
 
 class TodoController {
   _view = new TodoView();
@@ -61,7 +67,7 @@ class TodoController {
         todoItem._dueDate,
         todoItem._assignedListTitle,
         todoItem._id,
-        todoItem._iconColor,
+        todoItem._priority,
       );
     }
   }
@@ -77,6 +83,7 @@ class TodoController {
       taskDescription,
       date,
       taskList,
+      priority,
       hiddenFormTodoId,
       hiddenFormTodoAssignedList,
     } = dataObj;
@@ -93,7 +100,7 @@ class TodoController {
     const todoItem = todoListBeforeSubmit.findTodo(hiddenFormTodoId);
 
     // Data entry update todo-item
-    todoItem.update(taskDescription, date, taskList, newIconColor); //error must be in update
+    todoItem.update(taskDescription, date, taskList, newIconColor, priority); //error must be in update
 
     // Delete todo-item from list before submission - Data entry need to update todo-list
     todoListBeforeSubmit.deleteItem(todoItem._id);
@@ -107,6 +114,7 @@ class TodoController {
       taskList,
       hiddenFormTodoId,
       newIconColor,
+      priority,
     );
 
     // Update todo-list counter - UI
@@ -115,15 +123,15 @@ class TodoController {
     // Update current displayed tasklist after edit of a todo - UI
     this._view.renderFilteredTasks(todoListBeforeSubmit.list);
 
+    // Saves list to locale storage
+    this._storageService.saveTodoLists(this._model._todoLists);
+    this._storageService.saveAllTodosList(this._model.allTodos);
+
     // Check if active filter is all, to prevent that all todos get rendered for other todo-lists
     if (this._activeFilter === "all") {
       // Update the tab "all" todo-list when a new task is created  - UI
       this._view.renderFilteredTasks(this._model.allTodos);
     }
-
-    // Saves list to locale storage
-    this._storageService.saveTodoLists(this._model._todoLists);
-    this._storageService.saveAllTodosList(this._model.allTodos);
 
     // Close window after submit
     this._view._dialogEditTask.close();
@@ -175,6 +183,7 @@ class TodoController {
       dataObj.taskDescription,
       dataObj.date,
       dataObj.taskList,
+      dataObj.priority,
     );
   }
   createTodoList(dataObj) {
@@ -187,7 +196,7 @@ class TodoController {
     // Get data from form submission
     const data = new FormData(event.target);
     const dataObj = Object.fromEntries(data.entries());
-
+    console.log(dataObj);
     //Create new todo in database
     const todoItem = this.createTodoItem(dataObj);
 
@@ -285,8 +294,11 @@ class TodoController {
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
   init() {
+    console.log("init");
     // // Renders the dynamic date
     this._view.renderIntro(currentDate, calcTimePhrase);
+    // Render icons - UI
+    this._view.renderIcons();
     // Makes sure that the app runs with empty local storage
     if (
       this._storageService.todoLists === null ||
@@ -321,6 +333,11 @@ class TodoController {
 
     // Renders Counters - UI
     this._view.updateListCounter(this._model._todoLists, this._model.allTodos);
+
+    // Update task form dropdown, based on the all accessible todo-list names - UI
+    storageTodoLists.forEach((todoList) => {
+      this._view.renderFormDropdown({ listTitle: todoList._title });
+    });
   }
 }
 

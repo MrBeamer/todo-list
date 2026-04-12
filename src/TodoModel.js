@@ -2,10 +2,6 @@ class TodoModel {
   _todoLists = [];
   _allTodos = [];
 
-  updateList() {
-    //placeholder
-  }
-
   addToAllTodos(todo) {
     this._allTodos.push(todo);
   }

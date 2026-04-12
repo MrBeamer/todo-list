@@ -86,6 +86,56 @@
               <option value="">Please choose a list</option>
             </select>
           </div>
+          <div id="field-priority">
+            <p class="priority-label">Priority</p>
+            <div class="priority-options">
+              <label
+                class="priority-option priority-option-low"
+                data-priority="low"
+              >
+                <input type="radio" name="priority" value="low" />
+
+                <div class="btn-priority-content">
+                  <img
+                    class="priority-icon priority-icon-low"
+                    src=""
+                    alt="priority-icon-low"
+                  />
+                  <span class="priority-tag">Low</span>
+                </div>
+              </label>
+              <label
+                class="priority-option priority-option-medium"
+                data-priority="medium"
+              >
+                <input type="radio" name="priority" value="medium" />
+
+                <div class="btn-priority-content">
+                  <img
+                    class="priority-icon priority-icon-medium"
+                    src=""
+                    alt="priority-icon-medium"
+                  />
+                  <span class="priority-tag">Medium</span>
+                </div>
+              </label>
+              <label
+                class="priority-option priority-option-high"
+                data-priority="high"
+              >
+                <input type="radio" name="priority" value="high" />
+
+                <div class="btn-priority-content">
+                  <img
+                    class="priority-icon priority-icon-high"
+                    src=""
+                    alt="priority-icon-high"
+                  />
+                  <span class="priority-tag">High</span>
+                </div>
+              </label>
+            </div>
+          </div>
           <div class="form-task-controls">
             <button
               class="form-task-close"
@@ -150,8 +200,72 @@
             <label for="edit-list">List</label>
             <select name="taskList" id="edit-list" required>
               <option value="">Please choose a list</option>
-              <option value="fun">Fun</option>
             </select>
+          </div>
+          <div id="field-priority">
+            <p class="priority-label">Priority</p>
+            <div class="priority-options">
+              <label
+                class="priority-option priority-option-low"
+                data-priority="low"
+              >
+                <input
+                  type="radio"
+                  name="priority"
+                  value="low"
+                  id="edit-low-input"
+                />
+
+                <div class="btn-priority-content">
+                  <img
+                    class="priority-icon priority-icon-low"
+                    src=""
+                    alt="priority-icon-low"
+                  />
+                  <span class="priority-tag">Low</span>
+                </div>
+              </label>
+              <label
+                class="priority-option priority-option-medium"
+                data-priority="medium"
+              >
+                <input
+                  type="radio"
+                  name="priority"
+                  value="medium"
+                  id="edit-medium-input"
+                />
+
+                <div class="btn-priority-content">
+                  <img
+                    class="priority-icon priority-icon-medium"
+                    src=""
+                    alt="priority-icon-medium"
+                  />
+                  <span class="priority-tag">Medium</span>
+                </div>
+              </label>
+              <label
+                class="priority-option priority-option-high"
+                data-priority="high"
+              >
+                <input
+                  type="radio"
+                  name="priority"
+                  value="high"
+                  id="edit-high-input"
+                />
+
+                <div class="btn-priority-content">
+                  <img
+                    class="priority-icon priority-icon-high"
+                    src=""
+                    alt="priority-icon-high"
+                  />
+                  <span class="priority-tag">High</span>
+                </div>
+              </label>
+            </div>
           </div>
           <input
             type="hidden"

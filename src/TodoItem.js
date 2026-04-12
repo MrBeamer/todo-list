@@ -3,12 +3,12 @@ class TodoItem {
   _id = crypto.randomUUID();
   _iconColor = "";
   _assignedListId = "";
-  constructor(description, dueDate = "none", assignedListTitle) {
+  constructor(description, dueDate = "none", assignedListTitle, priority) {
     // this._title = title;  // not used right now
     this._description = description;
     this._dueDate = dueDate;
     this._assignedListTitle = assignedListTitle;
-    // this._priority = priority; // not used right now
+    this._priority = priority;
   }
 
   toggleIsChecked() {
@@ -68,20 +68,15 @@ class TodoItem {
   }
 
   set priority(input) {
-    const lookUp = {
-      0: "none",
-      1: "low",
-      2: "medium",
-      3: "high",
-    };
-    this._priority = lookUp[input];
+    this._priority = input;
   }
 
-  update(description, date, listTitle, iconColor) {
+  update(description, date, listTitle, iconColor, priority) {
     this._description = description;
     this._dueDate = date;
     this._assignedListTitle = listTitle;
     this._iconColor = iconColor;
+    this._priority = priority;
   }
 
   static fromJSON(obj) {
@@ -89,12 +84,14 @@ class TodoItem {
       obj._description,
       obj._dueDate,
       obj._assignedListTitle,
+      obj._priority,
     );
 
     item._id = obj._id;
     item._isChecked = obj._isChecked;
     item._iconColor = obj._iconColor;
     item._assignedListId = obj._assignedListId;
+    item._priority = obj._priority;
 
     return item;
   }
