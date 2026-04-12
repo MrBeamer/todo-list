@@ -16,7 +16,7 @@ const formateDate = (date, option) => {
   } else if (option === "inter") {
     return format(date, "dd MMM yyyy"); // 20 Feb 2026
   } else if (option === "long") {
-    format(date, "EEEE, dd MMMM yyyy"); // Saturday, 28 March 2026
+    return format(date, "EEEE, dd MMMM yyyy"); // Saturday, 28 March 2026
   } else if (option === "time") {
     return format(now, "HH:mm"); // 12:10 Uhr
   }
@@ -29,12 +29,6 @@ const calcTimePhrase = () => {
   if (hour >= 12 && hour < 17) return "Afternoon";
   if (hour >= 17 && hour < 21) return "Evening";
   return "Night";
-};
-
-// Get local storage
-const getLocalStorage = (listStr) => {
-  const json = localStorage.getItem(`${listStr}`);
-  return JSON.parse(json);
 };
 
 export { capitalize, currentDate, calcTimePhrase, formateDate };

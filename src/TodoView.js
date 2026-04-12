@@ -29,9 +29,6 @@ class TodoView {
   _headerDate = document.querySelector(".intro-date");
   _headerWelcome = document.querySelector(".intro-welcome");
   _priorityIcons = document.querySelectorAll(".priority-icon");
-  _lowPriorityIcon = document.querySelectorAll(".priority-icon-low");
-  _mediumPriorityIcon = document.querySelectorAll(".priority-icon-medium");
-  _highPriorityIcon = document.querySelectorAll(".priority-icon-high");
   _priorityMediumInputEdit = document.getElementById("edit-medium-input");
   _priorityLowInputEdit = document.getElementById("edit-low-input");
   _priorityHighInputEdit = document.getElementById("edit-high-input");
@@ -123,13 +120,12 @@ class TodoView {
   }
 
   renderTask(todoItem) {
-    console.log(todoItem);
     // Render new task
     const todoItemHtmlElement = `<li class="task-item" data-todo-id="${todoItem._id}" data-assigned-list="${todoItem._assignedListTitle}">
           <div class="task-item-left" >
             <input type="checkbox" id="${todoItem._id}" data-assigned-list="${todoItem._assignedListTitle}"/>
-            <label for="${todoItem._id}">${todoItem._description}</label>
             <div class="list-icon" style="background-color: ${todoItem._iconColor}"></div>
+            <label for="${todoItem._id}">${todoItem._description}</label>
           </div>
           <div class="task-item-right">
             <div class="task-item-priority"> <img src=" ${this.renderPriorityIcon(todoItem._priority)}" alt="priority icon"></div>
@@ -157,7 +153,6 @@ class TodoView {
 
   renderNavList({ listTitle, iconColor }) {
     // used destructuring
-
     const navListHtmlElement = `<li class="nav-item" data-filter="${listTitle.toLowerCase()}">
             <div class="list">
               <div class="list-icon" style="background-color: ${iconColor}"></div>
@@ -178,7 +173,7 @@ class TodoView {
         }
       }
     }
-    this._countAllTodos.textContent = allTodosList.length; // moving it here fixed the initial 0 for all - but I do not why maybe check if any other list ist called home?
+    this._countAllTodos.textContent = allTodosList.length;
   }
 
   renderFilteredTasks(list) {
@@ -188,8 +183,8 @@ class TodoView {
       const todoItemHtmlElement = `<li class="task-item" class="task-item" data-todo-id="${todo._id}" data-assigned-list="${todo._assignedListTitle}">
           <div class="task-item-left">
             <input type="checkbox" id="${todo._id}" data-assigned-list="${todo._assignedListTitle}"/>
-            <label for="${todo._id}">${todo._description}</label>
             <div class="list-icon" style="background-color: ${todo._iconColor}"></div>
+            <label for="${todo._id}">${todo._description}</label>
           </div>
           <div class="task-item-right">
             <div class="task-item-priority"> <img src=" ${this.renderPriorityIcon(todo._priority)}" alt="priority icon"></div>
@@ -227,10 +222,3 @@ class TodoView {
 }
 
 export { TodoView };
-// here when I have local memory
-// for (let listCounter of this._listCounters) {
-//     console.log(listCounter.dataset.list);
-//     if (listCounter.dataset.list === todItem.assignedListTitle) {
-//       listCounter.textContent = todoList.list.length;
-//     }
-//   }

@@ -28,6 +28,10 @@ class TodoModel {
     return this._todoLists;
   }
 
+  set todoLists(arr) {
+    this._todoLists = arr;
+  }
+
   findTodoList(listTitle) {
     return this._todoLists.find((element) => element._title === listTitle);
   }

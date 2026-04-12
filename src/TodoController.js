@@ -6,19 +6,14 @@ import { currentDate } from "./helper.js";
 import { calcTimePhrase } from "./helper.js";
 import { StorageService } from "./StorageService.js";
 
-// last thing when everything works clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
-// Add prioties
-// place the dialogs at better positions
+// clean up _assignedListTitle and id on input and all functions which use the value allign to one either id or _assignedListTitle
 // Refactor code
-//fix when somebody uses numbers as todo-list name renderformdropdown function breaks because of capitalize ad lowercase
-// Bugs when rerendering with local storage, dropdown list disappears
-// add priority to edit
-
+// Only is while local storage is active and only in the all filter is active - can not delete or edit without breaking stuff, switching between other works
 class TodoController {
   _view = new TodoView();
   _model = new TodoModel();
   _storageService = new StorageService();
-  _activeFilter = "all"; // all is default list like all
+  _activeFilter = "all";
 
   constructor() {
     this._view._tasklist.addEventListener("click", (event) =>
@@ -196,7 +191,6 @@ class TodoController {
     // Get data from form submission
     const data = new FormData(event.target);
     const dataObj = Object.fromEntries(data.entries());
-    console.log(dataObj);
     //Create new todo in database
     const todoItem = this.createTodoItem(dataObj);
 
@@ -294,7 +288,6 @@ class TodoController {
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
   init() {
-    console.log("init");
     // // Renders the dynamic date
     this._view.renderIntro(currentDate, calcTimePhrase);
     // Render icons - UI

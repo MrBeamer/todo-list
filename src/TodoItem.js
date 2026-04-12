@@ -4,7 +4,6 @@ class TodoItem {
   _iconColor = "";
   _assignedListId = "";
   constructor(description, dueDate = "none", assignedListTitle, priority) {
-    // this._title = title;  // not used right now
     this._description = description;
     this._dueDate = dueDate;
     this._assignedListTitle = assignedListTitle;
